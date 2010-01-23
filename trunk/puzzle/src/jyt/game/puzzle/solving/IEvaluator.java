@@ -10,7 +10,7 @@ package jyt.game.puzzle.solving;
  * @author jtoumit
  * @param <T>
  */
-public interface IEvaluation<T>
+public interface IEvaluator<T>
 {
 	double evaluate(Puzzle<T> pPuzzle);
 }
