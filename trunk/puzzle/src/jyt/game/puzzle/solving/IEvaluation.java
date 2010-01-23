@@ -2,7 +2,7 @@
  * Created on 20 janv. 2010
  * @author jtoumit
  */
-package jyt.game.muxxu.kingdom.puzzle.help;
+package jyt.game.puzzle.solving;
 
 /**
  * Evaluates the current puzzle and returns a double between 0 and 1.
@@ -10,11 +10,7 @@ package jyt.game.muxxu.kingdom.puzzle.help;
  * @author jtoumit
  * @param <T>
  */
-public class Evaluation<T>
+public interface IEvaluation<T>
 {
-	public double evaluate(Puzzle<T> pPuzzle)
-	{
-		// TODO Auto-generated method stub
-		
-	}
+	double evaluate(Puzzle<T> pPuzzle);
 }

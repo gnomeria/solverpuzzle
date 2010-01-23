@@ -2,11 +2,10 @@
  * Created on 21 janv. 2010
  * @author jtoumit
  */
-package jyt.game.muxxu.kingdom.puzzle.help.actions;
+package jyt.game.puzzle.solving.impl.actions;
 
-import jyt.game.muxxu.kingdom.puzzle.help.Action;
-import jyt.game.muxxu.kingdom.puzzle.help.IAction;
-import jyt.game.muxxu.kingdom.puzzle.help.Puzzle;
+import jyt.game.puzzle.solving.IAction;
+import jyt.game.puzzle.solving.Puzzle;
 
 public class Invert<T> implements IAction<T>
 {
@@ -51,5 +50,10 @@ public class Invert<T> implements IAction<T>
 		T save = pPuzzle.get(x1, y1);
 		pPuzzle.set(x1, y1, pPuzzle.get(x2, y2));
 		pPuzzle.set(x2, y2, save);
+	}
+	@Override
+	public IAction<T> getReverseAction(Puzzle<T> pPuzzle)
+	{
+		return new Invert<T>(x1, y1, x2, y2);
 	}
 }
