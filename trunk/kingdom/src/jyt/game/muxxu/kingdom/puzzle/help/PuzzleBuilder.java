@@ -14,7 +14,7 @@ import jyt.game.puzzle.solving.Puzzle;
 public class PuzzleBuilder
 {
 	public static final int RECTANGLE_SIZE = 289;
-	private static final int SQUARE_SIZE = 36;
+	public static final int SQUARE_SIZE = 36;
 
 	private int mLastX = 827;
 	private int mLastY = 568;
@@ -63,11 +63,14 @@ public class PuzzleBuilder
 		{
 			// Read the puzzle
 			System.out.println("found puzzle at " + mLastX + ", " + mLastY);
+			puzzle = new Puzzle<Element>(8, 8);
 			for (int j = 0; j < 8; j++)
 			{
 				for (int i = 0; i < 8; i++)
 				{
-					System.out.print("" + getSquareElement(robot, mLastX + i * SQUARE_SIZE + 1, mLastY + j * SQUARE_SIZE + 1, (i + j) % 2 == 0) + "\t");
+					Object squareElement = getSquareElement(robot, mLastX + i * SQUARE_SIZE + 1, mLastY + j * SQUARE_SIZE + 1, (i + j) % 2 == 0);
+					puzzle.set(i, j, (Element)squareElement);
+					System.out.print("" + squareElement + "\t");
 				}
 				System.out.println();
 			}
@@ -98,48 +101,76 @@ public class PuzzleBuilder
 
 	private boolean isOkColour(Color pCol, int pRed, int pGreen, int pBlue, int pThreshold)
 	{
-		return Math.pow(Math.abs(pRed - pCol.getRed()), 2) + Math.pow(Math.abs(pGreen - pCol.getGreen()), 2) + Math.pow(Math.abs(pBlue - pCol.getBlue()), 2) < Math.pow(pThreshold, 2);
+		return getColourDiff(pCol, pRed, pGreen, pBlue) < Math.pow(pThreshold, 2);
+	}
+
+	private double getColourDiff(Color pCol, int pRed, int pGreen, int pBlue)
+	{
+		return Math.pow(Math.abs(pRed - pCol.getRed()), 2) + Math.pow(Math.abs(pGreen - pCol.getGreen()), 2) + Math.pow(Math.abs(pBlue - pCol.getBlue()), 2);
 	}
 
 	private Object getSquareElement(Robot pRobot, int x, int y, boolean pEven)
 	{
-		long green = 0;
-		long red = 0;
-		long blue = 0;
-		long nb = 0;
-		for (int i = 0; i < SQUARE_SIZE - 2; i++)
+//		long green = 0;
+//		long red = 0;
+//		long blue = 0;
+//		long nb = 0;
+//		for (int i = 0; i < SQUARE_SIZE - 2; i++)
+//		{
+//			for (int j = 0; j < SQUARE_SIZE - 2; j++)
+//			{
+//				Color pixelColor = pRobot.getPixelColor(x + i, y + j);
+//				if (!isOkColour(pixelColor, 247, 247, 222, 60))
+//				// Discard any white because of the hint
+//					if (pEven)
+//					// We're on a clear one
+//					{
+//						if (!isOkColour(pixelColor, 192, 209, 110, 30))
+//						{
+//							green += pixelColor.getGreen();
+//							red += pixelColor.getRed();
+//							blue += pixelColor.getBlue();
+//							nb++;
+//							zob[x - mLastX + i + 1 + (y - mLastY + j + 1) * RECTANGLE_SIZE] = 1;
+//						}
+//					}
+//					else
+//					// We're on a darker one
+//					{
+//						if (!isOkColour(pixelColor, 178, 195, 78, 30))
+//						{
+//							green += pixelColor.getGreen();
+//							red += pixelColor.getRed();
+//							blue += pixelColor.getBlue();
+//							nb++;
+//							zob[x - mLastX + i + (y - mLastY + j) * RECTANGLE_SIZE] = 1;
+//						}
+//					}
+//			}
+//		}
+//		return "" + nb + " " + (red / nb) + " " + (green / nb) + " " + (blue / nb);
+		ElementRecognitionData[] data = new ElementRecognitionData[]
 		{
-			for (int j = 0; j < SQUARE_SIZE - 2; j++)
+			new ElementRecognitionData(Element.SWORD,  new int[] {140, 130, 107}, new int[] { 82,  65,  41}),
+			new ElementRecognitionData(Element.HUMAN,  new int[] { 90, 162, 173}, new int[] {140,  89,  33}),
+			new ElementRecognitionData(Element.HAMMER, new int[] {148, 150, 148}, new int[] {189, 105,  66}),
+			new ElementRecognitionData(Element.LEAF,   new int[] {247, 223, 165}, new int[] {222, 186, 115}),
+			new ElementRecognitionData(Element.MONEY,  new int[] {231, 203, 148}, new int[] {214,  89,   0}),
+			new ElementRecognitionData(Element.REPLAY, new int[] {132,  32,  24}, new int[] { 24, 130,   8}),
+			new ElementRecognitionData(Element.WOOD,   new int[] { 57,  36,  24}, new int[] {132,  77,  33})
+		};
+		Element elementFound = null;
+		long miniFound = Long.MAX_VALUE;
+		for (int i = 0; i < data.length; i++)
+		{
+			double firstValue = getColourDiff(pRobot.getPixelColor(x + ElementRecognitionData.sFirstX, y + ElementRecognitionData.sFirstY), data[i].mFirstRGB[0], data[i].mFirstRGB[1], data[i].mFirstRGB[2]);
+			double secondValue = getColourDiff(pRobot.getPixelColor(x + ElementRecognitionData.secondX, y + ElementRecognitionData.secondY), data[i].mSecondRGB[0], data[i].mSecondRGB[1], data[i].mSecondRGB[2]);
+			if (firstValue + secondValue < miniFound)
 			{
-				Color pixelColor = pRobot.getPixelColor(x + i, y + j);
-				if (!isOkColour(pixelColor, 247, 247, 222, 60))
-				// Discard any white because of the hint
-					if (pEven)
-					// We're on a clear one
-					{
-						if (!isOkColour(pixelColor, 192, 209, 110, 30))
-						{
-							green += pixelColor.getGreen();
-							red += pixelColor.getRed();
-							blue += pixelColor.getBlue();
-							nb++;
-							zob[x - mLastX + i + 1 + (y - mLastY + j + 1) * RECTANGLE_SIZE] = 1;
-						}
-					}
-					else
-					// We're on a darker one
-					{
-						if (!isOkColour(pixelColor, 178, 195, 78, 30))
-						{
-							green += pixelColor.getGreen();
-							red += pixelColor.getRed();
-							blue += pixelColor.getBlue();
-							nb++;
-							zob[x - mLastX + i + (y - mLastY + j) * RECTANGLE_SIZE] = 1;
-						}
-					}
+				miniFound = (long)(firstValue + secondValue);
+				elementFound = data[i].mElement;
 			}
 		}
-		return "" + nb + " " + (red / nb) + " " + (green / nb) + " " + (blue / nb);
+		return elementFound;
 	}
 }
