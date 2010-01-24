@@ -30,18 +30,19 @@ public class HintDiscoverer
 	{
 		ActionManager<Element> actionManager = new ActionManager<Element>(mPuzzle, new Collapser());
 		Collection<Hint> hints = new ArrayList<Hint>();
-		for (int x = 0; x < mPuzzle.getWidth(); x++)
-		{
-			for (int y = 0; y < mPuzzle.getHeight(); y++)
+		if (mPuzzle != null)
+			for (int x = 0; x < mPuzzle.getWidth(); x++)
 			{
-				if (x < mPuzzle.getWidth() - 1)
-				// try right
-					tryInvert(actionManager, hints, x, y, x + 1, y);
-				if (y < mPuzzle.getHeight() - 1)
-				// try down
-					tryInvert(actionManager, hints, x, y, x, y + 1);
+				for (int y = 0; y < mPuzzle.getHeight(); y++)
+				{
+					if (x < mPuzzle.getWidth() - 1)
+					// try right
+						tryInvert(actionManager, hints, x, y, x + 1, y);
+					if (y < mPuzzle.getHeight() - 1)
+					// try down
+						tryInvert(actionManager, hints, x, y, x, y + 1);
+				}
 			}
-		}
 		return hints;
 	}
 
