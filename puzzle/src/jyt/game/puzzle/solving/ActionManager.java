@@ -65,7 +65,14 @@ public class ActionManager<T> implements ICollapseListener<T>
 			throw new IllegalStateException("Could not rollback: nothing to rollback");
 		Stack<IAction<T>> actions = mRollback.pop();
 		while (!actions.isEmpty())
-			actions.pop().doAction(mPuzzle);
+		{
+			IAction<T> action = actions.pop();
+			for (IActionListener<T> pActionListener : mActionListeners)
+				pActionListener.actionWillExecute(action);
+			action.doAction(mPuzzle);
+			for (IActionListener<T> pActionListener : mActionListeners)
+				pActionListener.actionExecuted(action);
+		}
 	}
 
 	@Override

@@ -153,7 +153,7 @@ public class PuzzleBuilder
 		{
 			new ElementRecognitionData(Element.SWORD,  new int[] {140, 130, 107}, new int[] { 82,  65,  41}),
 			new ElementRecognitionData(Element.HUMAN,  new int[] { 90, 162, 173}, new int[] {140,  89,  33}),
-			new ElementRecognitionData(Element.HAMMER, new int[] {148, 150, 148}, new int[] {189, 105,  66}),
+			new ElementRecognitionData(Element.BUILD,  new int[] {148, 150, 148}, new int[] {189, 105,  66}),
 			new ElementRecognitionData(Element.LEAF,   new int[] {247, 223, 165}, new int[] {222, 186, 115}),
 			new ElementRecognitionData(Element.MONEY,  new int[] {231, 203, 148}, new int[] {214,  89,   0}),
 			new ElementRecognitionData(Element.REPLAY, new int[] {132,  32,  24}, new int[] { 24, 130,   8}),

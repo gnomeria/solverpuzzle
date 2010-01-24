@@ -5,11 +5,13 @@
 package jyt.game.muxxu.kingdom.puzzle.help;
 
 import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -19,6 +21,7 @@ import jyt.game.puzzle.solving.Puzzle;
 public class PuzzleCanvas extends Canvas
 {
 	private Puzzle<Element> mPuzzle;
+	private List<Hint> mHints = new ArrayList<Hint>();
 	private Map<Element, Image> mImages = new HashMap<Element, Image>();
 
 	/**
@@ -29,35 +32,23 @@ public class PuzzleCanvas extends Canvas
 	public PuzzleCanvas(Puzzle<Element> pPuzzle) throws IOException
 	{
 		super();
-		mPuzzle = pPuzzle;
 		for (Element element : Element.values())
 		{
 			mImages.put(element, getImage(element.toString().toLowerCase() + ".png"));
 		}
 		setSize(PuzzleBuilder.RECTANGLE_SIZE, PuzzleBuilder.RECTANGLE_SIZE);
+		setPuzzle(pPuzzle);
 	}
 
 	private Image getImage(String pName) throws IOException
 	{
-		// Read from a URL
-		InputStream is = getClass().getResourceAsStream("/jyt/game/muxxu/kingdom/puzzle/help/img/" + pName);
-//		URL url = new URL("/jyt/game/mukku/kingdom/puzzle/help/img/" + pName);
-		return ImageIO.read(is);
+		return ImageIO.read(getClass().getResourceAsStream("/jyt/game/muxxu/kingdom/puzzle/help/img/" + pName));
 	}
 
 	@Override
 	public void paint(Graphics pG)
 	{
 		super.paint(pG);
-//		pG.setColor(Color.BLACK);
-//		for (int x = 0; x < PuzzleBuilder.RECTANGLE_SIZE; x++)
-//		{
-//			for (int y = 0 ; y < PuzzleBuilder.RECTANGLE_SIZE; y++)
-//			{
-//				if (PuzzleBuilder.zob[x + y * PuzzleBuilder.RECTANGLE_SIZE] == 1)
-//					pG.drawRect(x+5, y+30, 1, 1);
-//			}
-//		}
 		if (mPuzzle != null)
 		{
 			for (int x = 0; x < mPuzzle.getWidth(); x++)
@@ -67,6 +58,20 @@ public class PuzzleCanvas extends Canvas
 					pG.drawImage(mImages.get(mPuzzle.get(x, y)), x * PuzzleBuilder.SQUARE_SIZE, y * PuzzleBuilder.SQUARE_SIZE, this);
 				}
 			}
+			for (Hint hint : mHints)
+			{
+				pG.setColor(new Color(Math.min(255, hint.getNbReleased() * 50), 0, 0));
+				pG.drawLine(hint.getX1() * PuzzleBuilder.SQUARE_SIZE + PuzzleBuilder.SQUARE_SIZE / 2, hint.getY1() * PuzzleBuilder.SQUARE_SIZE + PuzzleBuilder.SQUARE_SIZE / 2, hint.getX2() * PuzzleBuilder.SQUARE_SIZE + PuzzleBuilder.SQUARE_SIZE / 2, hint.getY2() * PuzzleBuilder.SQUARE_SIZE + PuzzleBuilder.SQUARE_SIZE / 2);
+			}
 		}
+	}
+
+	public void setPuzzle(Puzzle<Element> pPuzzle)
+	{
+		mPuzzle = pPuzzle;
+		mHints.clear();
+		HintDiscoverer discoverer = new HintDiscoverer(mPuzzle);
+		mHints.addAll(discoverer.getHints());
+		repaint();
 	}
 }
