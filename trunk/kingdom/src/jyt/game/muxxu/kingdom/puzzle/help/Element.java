@@ -4,4 +4,4 @@
  */
 package jyt.game.muxxu.kingdom.puzzle.help;
 
-public enum Element {MONEY, WOOD, HUMAN, SWORD, REPLAY, LEAF, HAMMER}
+public enum Element {MONEY, WOOD, HUMAN, SWORD, REPLAY, LEAF, BUILD}

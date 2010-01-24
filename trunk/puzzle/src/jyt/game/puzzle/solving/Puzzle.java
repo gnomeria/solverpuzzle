@@ -4,11 +4,11 @@
  */
 package jyt.game.puzzle.solving;
 
-@SuppressWarnings("unchecked")
 public class Puzzle<T>
 {
 	private T[][] mGrid;
 
+	@SuppressWarnings("unchecked")
 	public Puzzle(int pWidth, int pHeight)
 	{
 		super();
@@ -44,5 +44,19 @@ public class Puzzle<T>
 	public int getHeight()
 	{
 		return mGrid[0].length;
+	}
+	@Override
+	public String toString()
+	{
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < mGrid[0].length; i++)
+		{
+			for (int j = 0; j < mGrid.length; j++)
+			{
+				sb.append(mGrid[j][i] == null ? ' ' : mGrid[j][i].toString().charAt(0));
+			}
+			sb.append('\n');
+		}
+		return sb.toString();
 	}
 }
