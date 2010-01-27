@@ -13,6 +13,7 @@ import java.io.IOException;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import jyt.game.puzzle.solving.Puzzle;
 
@@ -24,10 +25,16 @@ public class KingdomHelp extends JFrame
 	public KingdomHelp() throws IOException
 	{
 		super();
-		setBounds(0, 0, 300, 350);
+		setBounds(0, 0, 600, 350);
 		setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+		JPanel inside = new JPanel();
+		inside.setLayout(new BoxLayout(inside, BoxLayout.X_AXIS));
 		mPuzzle = new PuzzleBuilder().buildPuzzle();
-		add(mPuzzleCanvas = new PuzzleCanvas(mPuzzle));
+		inside.add(mPuzzleCanvas = new PuzzleCanvas(mPuzzle));
+		HintListenerCanvas hintListenerCanvas = new HintListenerCanvas();
+		inside.add(hintListenerCanvas);
+		mPuzzleCanvas.addHintListener(hintListenerCanvas);
+		add(inside);
 		JButton buttonRedraw = new JButton("Redraw");
 		add(buttonRedraw);
 		buttonRedraw.addActionListener(new ActionListener()

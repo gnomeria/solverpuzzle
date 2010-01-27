@@ -52,7 +52,7 @@ public class HintDiscoverer
 		Result<Element> result = pActionManager.executeActionAndCollapse(action);
 		if (result.nbReleased() > 0)
 		{
-			pHints.add(new Hint(x1, y1, x2, y2, result.nbReleased()));
+			pHints.add(new Hint(x1, y1, x2, y2, result));
 		}
 		pActionManager.rollBack();
 	}

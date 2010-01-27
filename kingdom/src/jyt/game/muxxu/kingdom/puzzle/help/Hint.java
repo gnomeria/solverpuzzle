@@ -4,13 +4,15 @@
  */
 package jyt.game.muxxu.kingdom.puzzle.help;
 
+import jyt.game.puzzle.solving.Result;
+
 public class Hint
 {
 	private int x1;
 	private int y1;
 	private int x2;
 	private int y2;
-	private int mNbReleased;
+	private Result<Element> mResult;
 
 	/**
 	 * Created on 24 janv. 2010 by jtoumit.<br>
@@ -18,16 +20,16 @@ public class Hint
 	 * @param pY1
 	 * @param pX2
 	 * @param pY2
-	 * @param pNbReleased
+	 * @param pResult
 	 */
-	public Hint(int pX1, int pY1, int pX2, int pY2, int pNbReleased)
+	public Hint(int pX1, int pY1, int pX2, int pY2, Result<Element> pResult)
 	{
 		super();
 		x1 = pX1;
 		y1 = pY1;
 		x2 = pX2;
 		y2 = pY2;
-		mNbReleased = pNbReleased;
+		mResult = pResult;
 	}
 
 	public int getX1()
@@ -52,6 +54,11 @@ public class Hint
 
 	public int getNbReleased()
 	{
-		return mNbReleased;
+		return mResult.nbReleased();
+	}
+
+	public Result<Element> getResult()
+	{
+		return mResult;
 	}
 }
