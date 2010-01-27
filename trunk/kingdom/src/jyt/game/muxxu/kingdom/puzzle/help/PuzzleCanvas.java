@@ -38,7 +38,7 @@ public class PuzzleCanvas extends Canvas
 			{
 				int x = pEvent.getX() / PuzzleBuilder.SQUARE_SIZE;
 				int y = pEvent.getY() / PuzzleBuilder.SQUARE_SIZE;
-				boolean found = false;
+				Hint foundHint = null;
 				for (Hint hint : mHints)
 				{
 					if ((hint.getX1() == x) && (hint.getY1() == y))
@@ -51,8 +51,7 @@ public class PuzzleCanvas extends Canvas
 						{
 							if ((yInSquare > PuzzleBuilder.SQUARE_SIZE * 3 / 4) && (xInSquare > PuzzleBuilder.SQUARE_SIZE / 4) && (xInSquare < PuzzleBuilder.SQUARE_SIZE * 3 / 4))
 							{
-								notifyHintListeners(hint);
-								found = true;
+								foundHint = hint;
 								break;
 							}
 						}
@@ -61,15 +60,37 @@ public class PuzzleCanvas extends Canvas
 						{
 							if ((xInSquare > PuzzleBuilder.SQUARE_SIZE * 3 / 4) && (yInSquare > PuzzleBuilder.SQUARE_SIZE / 4) && (yInSquare < PuzzleBuilder.SQUARE_SIZE * 3 / 4))
 							{
-								notifyHintListeners(hint);
-								found = true;
+								foundHint = hint;
+								break;
+							}
+						}
+					}
+					else if ((hint.getX2() == x) && (hint.getY2() == y))
+					// Second hint square
+					{
+						int xInSquare = pEvent.getX() - x * PuzzleBuilder.SQUARE_SIZE;
+						int yInSquare = pEvent.getY() - y * PuzzleBuilder.SQUARE_SIZE;
+						if (hint.getX1() == hint.getX2())
+						// Up
+						{
+							if ((yInSquare < PuzzleBuilder.SQUARE_SIZE * 3 / 4) && (xInSquare > PuzzleBuilder.SQUARE_SIZE / 4) && (xInSquare < PuzzleBuilder.SQUARE_SIZE * 3 / 4))
+							{
+								foundHint = hint;
+								break;
+							}
+						}
+						else
+						// Left
+						{
+							if ((xInSquare < PuzzleBuilder.SQUARE_SIZE * 3 / 4) && (yInSquare > PuzzleBuilder.SQUARE_SIZE / 4) && (yInSquare < PuzzleBuilder.SQUARE_SIZE * 3 / 4))
+							{
+								foundHint = hint;
 								break;
 							}
 						}
 					}
 				}
-				if (!found)
-					notifyHintListeners(null);
+				notifyHintListeners(foundHint);
 				super.mouseMoved(pEvent);
 			}
 		});
