@@ -38,7 +38,15 @@ public class PuzzleBuilder
 		if (mLastX != -1)
 		// Check if it's still at the last position found
 			found = checkPosition(robot, mLastX, mLastY);
+
+		// Check 2 positions in which it's very likely to be found
 		if (!found)
+			found = checkPosition(robot, 2507, 568);
+		if (!found)
+			found = checkPosition(robot, 827, 568);
+
+		if (!found)
+		// Couldn't find it: reset the x value and search for it accross the screen
 		{
 			mLastX = -1;
 			int x;
@@ -49,16 +57,13 @@ public class PuzzleBuilder
 				{
 					found = checkPosition(robot, x, y);
 					if (found)
-					{
-						mLastX = x;
-						mLastY = y;
 						break;
-					}
 				}
 				if (found)
 					break;
 			}
 		}
+
 		if (found)
 		{
 			// Read the puzzle
@@ -70,9 +75,9 @@ public class PuzzleBuilder
 				{
 					Object squareElement = getSquareElement(robot, mLastX + i * SQUARE_SIZE + 1, mLastY + j * SQUARE_SIZE + 1, (i + j) % 2 == 0);
 					puzzle.set(i, j, (Element)squareElement);
-					System.out.print("" + squareElement + "\t");
+//					System.out.print("" + squareElement + "\t");
 				}
-				System.out.println();
+//				System.out.println();
 			}
 		}
 		return puzzle;
@@ -91,6 +96,8 @@ public class PuzzleBuilder
 			if (!isOkColour(pRobot.getPixelColor(x + RECTANGLE_SIZE, y + i)))
 				return false;
 		}
+		mLastX = x;
+		mLastY = y;
 		return true;
 	}
 
