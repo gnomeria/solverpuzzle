@@ -53,4 +53,16 @@ public class CollapseRow<T> implements IAction<T>
 		return new UpRow<T>(x, y, fill);
 	}
 
+	public int getX()
+	{
+		return x;
+	}
+	public int getY()
+	{
+		return y;
+	}
+	public int getSize()
+	{
+		return mFill.length;
+	}
 }
