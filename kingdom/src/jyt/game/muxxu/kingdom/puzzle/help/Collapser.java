@@ -4,9 +4,12 @@
  */
 package jyt.game.muxxu.kingdom.puzzle.help;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import jyt.game.puzzle.solving.ActionManager;
+import jyt.game.puzzle.solving.IAction;
 import jyt.game.puzzle.solving.ICollapseListener;
 import jyt.game.puzzle.solving.ICollapser;
 import jyt.game.puzzle.solving.Puzzle;
@@ -21,13 +24,18 @@ public class Collapser implements ICollapser<Element>
 		boolean oneCollapse = true;
 		while (oneCollapse)
 		{
+			List<IAction<Element>> actions = new ArrayList<IAction<Element>>();
+			boolean[][] used = new boolean[pPuzzle.getWidth()][pPuzzle.getHeight()];
+			for (int i = 0; i < used.length; i++)
+				Arrays.fill(used[i], false);
+
 			oneCollapse = false;
-			for (int x = 0; x < pPuzzle.getWidth(); x++)
+			for (int y = 0; y < pPuzzle.getHeight(); y++)
 			{
-				for (int y = 0; y < pPuzzle.getHeight(); y++)
+				for (int x = 0; x < pPuzzle.getWidth(); x++)
 				{
 					Element elt = pPuzzle.get(x, y);
-					if (elt != null)
+					if ((elt != null) && (!used[x][y]))
 					{
 						int nb = 1;
 						// Check down
@@ -42,31 +50,52 @@ public class Collapser implements ICollapser<Element>
 						if (nb >= 3)
 						{
 							oneCollapse = true;
-							pCollapseListener.collapsing(elt, nb);
+							for (int i = 0; i < nb; i++)
+								used[x][y + i] = true;
 							Element[] fill = new Element[nb];
 							Arrays.fill(fill, null);
-							pActionManager.executeAction(new CollapseCol<Element>(x, y, fill));
+							actions.add(new CollapseCol<Element>(x, y, fill));
 						}
-						nb = 1;
-						// Check right
-						for (int i = 1; x + i < pPuzzle.getWidth(); i++)
+						else
 						{
-							Element newElement = pPuzzle.get(x + i, y);
-							if ((newElement != null) && (newElement.equals(elt)))
-								nb++;
-							else
-								break;
-						}
-						if (nb >= 3)
-						{
-							oneCollapse = true;
-							pCollapseListener.collapsing(elt, nb);
-							Element[] fill = new Element[nb];
-							Arrays.fill(fill, null);
-							pActionManager.executeAction(new CollapseRow<Element>(x, y, fill));
+							nb = 1;
+							// Check right
+							for (int i = 1; x + i < pPuzzle.getWidth(); i++)
+							{
+								Element newElement = pPuzzle.get(x + i, y);
+								if ((newElement != null) && (newElement.equals(elt)))
+									nb++;
+								else
+									break;
+							}
+							if (nb >= 3)
+							{
+								oneCollapse = true;
+								for (int i = 0; i < nb; i++)
+									used[x + i][y] = true;
+								Element[] fill = new Element[nb];
+								Arrays.fill(fill, null);
+								actions.add(new CollapseRow<Element>(x, y, fill));
+							}
 						}
 					}
 				}
+			}
+			for (IAction<Element> action : actions)
+			{
+				if (action instanceof CollapseCol<?>)
+				{
+					CollapseCol<Element> collapse = (CollapseCol<Element>)action;
+					pCollapseListener.collapsing(pPuzzle.get(collapse.getX(), collapse.getY()), collapse.getSize());
+				}
+				else if (action instanceof CollapseRow<?>)
+				{
+					CollapseRow<Element> collapse = (CollapseRow<Element>)action;
+					pCollapseListener.collapsing(pPuzzle.get(collapse.getX(), collapse.getY()), collapse.getSize());
+				}
+				else
+					throw new RuntimeException("Should not occur");
+				pActionManager.executeAction(action);
 			}
 		}
 	}

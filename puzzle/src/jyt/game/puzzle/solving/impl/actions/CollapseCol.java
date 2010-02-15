@@ -54,4 +54,16 @@ public class CollapseCol<T> implements IAction<T>
 		return new UpCol<T>(x, y, fill);
 	}
 
+	public int getX()
+	{
+		return x;
+	}
+	public int getY()
+	{
+		return y;
+	}
+	public int getSize()
+	{
+		return mFill.length;
+	}
 }
