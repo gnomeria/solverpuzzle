@@ -16,8 +16,8 @@ public class PuzzleBuilder
 	public static final int RECTANGLE_SIZE = 289;
 	public static final int SQUARE_SIZE = 36;
 
-	private int mLastX = 827;
-	private int mLastY = 568;
+	private int mLastX = -1;
+	private int mLastY = -1;
 
 	static public int[] zob = new int[RECTANGLE_SIZE * RECTANGLE_SIZE];
 
@@ -41,9 +41,9 @@ public class PuzzleBuilder
 
 		// Check 2 positions in which it's very likely to be found
 		if (!found)
-			found = checkPosition(robot, 2507, 568);
+			found = checkPosition(robot, 2505, 567);
 		if (!found)
-			found = checkPosition(robot, 827, 568);
+			found = checkPosition(robot, 825, 567);
 
 		if (!found)
 		// Couldn't find it: reset the x value and search for it accross the screen

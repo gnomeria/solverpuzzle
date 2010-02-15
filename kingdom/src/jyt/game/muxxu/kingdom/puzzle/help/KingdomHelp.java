@@ -31,6 +31,7 @@ public class KingdomHelp extends JFrame
 		inside.setLayout(new BoxLayout(inside, BoxLayout.X_AXIS));
 		mPuzzle = new PuzzleBuilder().buildPuzzle();
 		inside.add(mPuzzleCanvas = new PuzzleCanvas(mPuzzle));
+		inside.add(new PreferencePanel());
 		HintListenerCanvas hintListenerCanvas = new HintListenerCanvas();
 		inside.add(hintListenerCanvas);
 		mPuzzleCanvas.addHintListener(hintListenerCanvas);
