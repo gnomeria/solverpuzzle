@@ -30,19 +30,19 @@ public class Collapser implements ICollapser<Element>
 				Arrays.fill(used[i], false);
 
 			oneCollapse = false;
-			for (int y = 0; y < pPuzzle.getHeight(); y++)
+			for (int x = 0; x < pPuzzle.getWidth(); x++)
 			{
-				for (int x = 0; x < pPuzzle.getWidth(); x++)
+				for (int y = 0; y < pPuzzle.getHeight(); y++)
 				{
 					Element elt = pPuzzle.get(x, y);
 					if ((elt != null) && (!used[x][y]))
 					{
 						int nb = 1;
-						// Check down
-						for (int i = 1; y + i < pPuzzle.getHeight(); i++)
+						// Check right
+						for (int i = 1; x + i < pPuzzle.getWidth(); i++)
 						{
-							Element newElement = pPuzzle.get(x, y + i);
-							if ((newElement != null) && (newElement.equals(elt)))
+							Element newElement = pPuzzle.get(x + i, y);
+							if ((newElement != null) && newElement.equals(elt) && (!used[x + i][y]))
 								nb++;
 							else
 								break;
@@ -51,19 +51,19 @@ public class Collapser implements ICollapser<Element>
 						{
 							oneCollapse = true;
 							for (int i = 0; i < nb; i++)
-								used[x][y + i] = true;
+								used[x + i][y] = true;
 							Element[] fill = new Element[nb];
 							Arrays.fill(fill, null);
-							actions.add(new CollapseCol<Element>(x, y, fill));
+							actions.add(new CollapseRow<Element>(x, y, fill));
 						}
 						else
 						{
 							nb = 1;
-							// Check right
-							for (int i = 1; x + i < pPuzzle.getWidth(); i++)
+							// Check down
+							for (int i = 1; y + i < pPuzzle.getHeight(); i++)
 							{
-								Element newElement = pPuzzle.get(x + i, y);
-								if ((newElement != null) && (newElement.equals(elt)))
+								Element newElement = pPuzzle.get(x, y + i);
+								if ((newElement != null) && newElement.equals(elt) && (!used[x][y + i]))
 									nb++;
 								else
 									break;
@@ -72,10 +72,10 @@ public class Collapser implements ICollapser<Element>
 							{
 								oneCollapse = true;
 								for (int i = 0; i < nb; i++)
-									used[x + i][y] = true;
+									used[x][y + i] = true;
 								Element[] fill = new Element[nb];
 								Arrays.fill(fill, null);
-								actions.add(new CollapseRow<Element>(x, y, fill));
+								actions.add(new CollapseCol<Element>(x, y, fill));
 							}
 						}
 					}
