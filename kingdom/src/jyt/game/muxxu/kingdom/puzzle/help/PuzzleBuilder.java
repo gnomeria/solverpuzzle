@@ -7,23 +7,31 @@ package jyt.game.muxxu.kingdom.puzzle.help;
 import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Robot;
-import java.util.Arrays;
 
 import jyt.game.puzzle.solving.Puzzle;
 
 public class PuzzleBuilder
 {
+	private static final int DEFAULT_Y = 567;
 	public static final int RECTANGLE_SIZE = 289;
 	public static final int SQUARE_SIZE = 36;
 
 	private int mLastX = -1;
 	private int mLastY = -1;
 
-	static public int[] zob = new int[RECTANGLE_SIZE * RECTANGLE_SIZE];
+	private static final ElementRecognitionData[] mRecognitionData = new ElementRecognitionData[]
+	{
+		new ElementRecognitionData(Element.SWORD,  new int[] {140, 130, 107}, new int[] { 82,  65,  41}),
+		new ElementRecognitionData(Element.HUMAN,  new int[] { 90, 162, 173}, new int[] {140,  89,  33}),
+		new ElementRecognitionData(Element.BUILD,  new int[] {148, 150, 148}, new int[] {189, 105,  66}),
+		new ElementRecognitionData(Element.LEAF,   new int[] {247, 223, 165}, new int[] {222, 186, 115}),
+		new ElementRecognitionData(Element.MONEY,  new int[] {231, 203, 148}, new int[] {214,  89,   0}),
+		new ElementRecognitionData(Element.REPLAY, new int[] {132,  32,  24}, new int[] { 24, 130,   8}),
+		new ElementRecognitionData(Element.WOOD,   new int[] { 57,  36,  24}, new int[] {132,  77,  33})
+	};
 
 	public Puzzle<Element> buildPuzzle()
 	{
-		Arrays.fill(zob, 0);
 		Puzzle<Element> puzzle = null;
 		Robot robot;
 		try
@@ -41,9 +49,11 @@ public class PuzzleBuilder
 
 		// Check 2 positions in which it's very likely to be found
 		if (!found)
-			found = checkPosition(robot, 2505, 567);
+			found = checkPosition(robot, 2505, DEFAULT_Y);
 		if (!found)
-			found = checkPosition(robot, 825, 567);
+			found = checkPosition(robot, 825, DEFAULT_Y);
+		if (!found)
+			found = checkPosition(robot, -615, DEFAULT_Y);
 
 		if (!found)
 		// Couldn't find it: reset the x value and search for it accross the screen
@@ -51,17 +61,26 @@ public class PuzzleBuilder
 			mLastX = -1;
 			int x;
 			int y;
-			for (x = 0; x < 3500; x++)
+			for (x = -3000; x < 3500; x++)
 			{
-				for (y = 0; y < 1500; y++)
+				if (checkPosition(robot, x, DEFAULT_Y))
 				{
-					found = checkPosition(robot, x, y);
+					found = true;
+					break;
+				}
+			}
+			if (!found)
+				for (x = -500; x < 3500; x++)
+				{
+					for (y = 0; y < 1500; y++)
+					{
+						found = checkPosition(robot, x, y);
+						if (found)
+							break;
+					}
 					if (found)
 						break;
 				}
-				if (found)
-					break;
-			}
 		}
 
 		if (found)
@@ -118,64 +137,16 @@ public class PuzzleBuilder
 
 	private Object getSquareElement(Robot pRobot, int x, int y, boolean pEven)
 	{
-//		long green = 0;
-//		long red = 0;
-//		long blue = 0;
-//		long nb = 0;
-//		for (int i = 0; i < SQUARE_SIZE - 2; i++)
-//		{
-//			for (int j = 0; j < SQUARE_SIZE - 2; j++)
-//			{
-//				Color pixelColor = pRobot.getPixelColor(x + i, y + j);
-//				if (!isOkColour(pixelColor, 247, 247, 222, 60))
-//				// Discard any white because of the hint
-//					if (pEven)
-//					// We're on a clear one
-//					{
-//						if (!isOkColour(pixelColor, 192, 209, 110, 30))
-//						{
-//							green += pixelColor.getGreen();
-//							red += pixelColor.getRed();
-//							blue += pixelColor.getBlue();
-//							nb++;
-//							zob[x - mLastX + i + 1 + (y - mLastY + j + 1) * RECTANGLE_SIZE] = 1;
-//						}
-//					}
-//					else
-//					// We're on a darker one
-//					{
-//						if (!isOkColour(pixelColor, 178, 195, 78, 30))
-//						{
-//							green += pixelColor.getGreen();
-//							red += pixelColor.getRed();
-//							blue += pixelColor.getBlue();
-//							nb++;
-//							zob[x - mLastX + i + (y - mLastY + j) * RECTANGLE_SIZE] = 1;
-//						}
-//					}
-//			}
-//		}
-//		return "" + nb + " " + (red / nb) + " " + (green / nb) + " " + (blue / nb);
-		ElementRecognitionData[] data = new ElementRecognitionData[]
-		{
-			new ElementRecognitionData(Element.SWORD,  new int[] {140, 130, 107}, new int[] { 82,  65,  41}),
-			new ElementRecognitionData(Element.HUMAN,  new int[] { 90, 162, 173}, new int[] {140,  89,  33}),
-			new ElementRecognitionData(Element.BUILD,  new int[] {148, 150, 148}, new int[] {189, 105,  66}),
-			new ElementRecognitionData(Element.LEAF,   new int[] {247, 223, 165}, new int[] {222, 186, 115}),
-			new ElementRecognitionData(Element.MONEY,  new int[] {231, 203, 148}, new int[] {214,  89,   0}),
-			new ElementRecognitionData(Element.REPLAY, new int[] {132,  32,  24}, new int[] { 24, 130,   8}),
-			new ElementRecognitionData(Element.WOOD,   new int[] { 57,  36,  24}, new int[] {132,  77,  33})
-		};
 		Element elementFound = null;
 		long miniFound = Long.MAX_VALUE;
-		for (int i = 0; i < data.length; i++)
+		for (int i = 0; i < mRecognitionData.length; i++)
 		{
-			double firstValue = getColourDiff(pRobot.getPixelColor(x + ElementRecognitionData.sFirstX, y + ElementRecognitionData.sFirstY), data[i].mFirstRGB[0], data[i].mFirstRGB[1], data[i].mFirstRGB[2]);
-			double secondValue = getColourDiff(pRobot.getPixelColor(x + ElementRecognitionData.secondX, y + ElementRecognitionData.secondY), data[i].mSecondRGB[0], data[i].mSecondRGB[1], data[i].mSecondRGB[2]);
+			double firstValue = getColourDiff(pRobot.getPixelColor(x + ElementRecognitionData.sFirstX, y + ElementRecognitionData.sFirstY), mRecognitionData[i].mFirstRGB[0], mRecognitionData[i].mFirstRGB[1], mRecognitionData[i].mFirstRGB[2]);
+			double secondValue = getColourDiff(pRobot.getPixelColor(x + ElementRecognitionData.secondX, y + ElementRecognitionData.secondY), mRecognitionData[i].mSecondRGB[0], mRecognitionData[i].mSecondRGB[1], mRecognitionData[i].mSecondRGB[2]);
 			if (firstValue + secondValue < miniFound)
 			{
 				miniFound = (long)(firstValue + secondValue);
-				elementFound = data[i].mElement;
+				elementFound = mRecognitionData[i].mElement;
 			}
 		}
 		return elementFound;
