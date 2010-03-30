@@ -7,6 +7,12 @@ package jyt.game.puzzle.solving.impl.actions;
 import jyt.game.puzzle.solving.IAction;
 import jyt.game.puzzle.solving.Puzzle;
 
+/**
+ * This action rotates some elements in the puzzle counter clockwise around the desired point.
+ * @author jtoumit
+ *
+ * @param <T>
+ */
 public class RotationCounterClockWise<T> implements IAction<T>
 {
 	private int x;
