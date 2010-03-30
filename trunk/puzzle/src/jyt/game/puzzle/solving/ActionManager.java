@@ -15,6 +15,7 @@ public class ActionManager<T> implements ICollapseListener<T>
 	private ICollapser<T> mCollapser;
 	private Result<T> mResult;
 	private List<IActionListener<T>> mActionListeners = new ArrayList<IActionListener<T>>();
+	private List<ICollapseListener<T>> mCollapseListeners = new ArrayList<ICollapseListener<T>>();
 
 	/**
 	 * Created on 23 janv. 2010 by jtoumit.<br>
@@ -79,5 +80,17 @@ public class ActionManager<T> implements ICollapseListener<T>
 	public void collapsing(T pType, int pNb)
 	{
 		mResult.release(pNb, pType);
+		for (ICollapseListener<T> collapseListener : mCollapseListeners)
+			collapseListener.collapsing(pType, pNb);
+	}
+
+	public void addCollapseListener(ICollapseListener<T> pCollapseListener)
+	{
+		mCollapseListeners.add(pCollapseListener);
+	}
+
+	public void removeCollapseListener(ICollapseListener<T> pCollapseListener)
+	{
+		mCollapseListeners.remove(pCollapseListener);
 	}
 }
