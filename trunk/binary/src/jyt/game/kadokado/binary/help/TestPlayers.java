@@ -81,8 +81,8 @@ public class TestPlayers
 		int bestFor4 = -1;
 		int bestMinusDistance = 0;
 		int current = 1;
-		int total = 2 * 2 * 2 * 11;
-		ExecutorService poolExecutor = Executors.newFixedThreadPool(2);
+		int total = 2 * 2 * 2 * 12;
+		ExecutorService poolExecutor = Executors.newFixedThreadPool(4);
 		List<Future<OneTest>> futures = new ArrayList<Future<OneTest>>();
 		for (int minusDistance = 0; minusDistance < 2; minusDistance++)
 		{
