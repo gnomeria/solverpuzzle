@@ -49,7 +49,7 @@ public class TestPlayers
 			int min = Integer.MAX_VALUE;
 			int max = 0;
 			int total = 0;
-			int nbRun = 100;
+			int nbRun = 2000;
 			for (int i = 0; i < nbRun; i++)
 			{
 				int current = evaluate();
@@ -118,6 +118,7 @@ public class TestPlayers
 			if (current++ % 3 == 0)
 				System.out.println(((System.currentTimeMillis() - start) / 1000) + "s, " + current + " / " + total + ", currentBestHit: " + bestHit + ", currentBestDivide = " + bestDivide + ", currentBestSquare: " + bestSquare + ", currentBestFor4: " + bestFor4 + ", currentBestMinusDistance: " + bestMinusDistance);
 		}
+		poolExecutor.shutdown();
 		System.out.println("Best: " + bestDivide + ", " + bestSquare + ", " + bestFor4 + ", " + bestMinusDistance + ", " + bestHit);
 	}
 
