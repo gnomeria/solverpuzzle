@@ -7,6 +7,11 @@ package jyt.game.puzzle.solving.impl.actions;
 import jyt.game.puzzle.solving.IAction;
 import jyt.game.puzzle.solving.Puzzle;
 
+/**
+ * Rotates 4 elements around the point clockwise.
+ * @author jtoumit
+ * @param <T>
+ */
 public class RotationClockWise<T> implements IAction<T>
 {
 	private int x;
