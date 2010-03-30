@@ -18,12 +18,17 @@ public class Puzzle<T>
 				mGrid[i][j] = null;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Puzzle(final Puzzle<? extends T> pPuzzle)
 	{
 		super();
+		mGrid = (T[][])new Object[pPuzzle.getWidth()][pPuzzle.getHeight()];
 		for (int i = 0; i < pPuzzle.mGrid.length; i++)
+		{
+			
 			for (int j = 0; j < pPuzzle.mGrid[i].length; j++)
 				mGrid[i][j] = pPuzzle.mGrid[i][j];
+		}
 	}
 
 	public T get(int x, int y)
