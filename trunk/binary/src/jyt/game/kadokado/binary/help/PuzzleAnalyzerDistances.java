@@ -17,25 +17,29 @@ public class PuzzleAnalyzerDistances implements IPuzzleAnalyzer
 	private boolean mSquareDistance;
 	private int mBestFor4;
 	private int mMinusDistance;
+	private boolean mUseMaxDistancePenalty;
 
 	public PuzzleAnalyzerDistances()
 	{
-		this(false, false, 80, 0);
+		this(false, false, 80, 0, false);
 	}
 
 	/**
-	 * Created on 28 mars 2010 by jtoumit.<br>
+	 * Created on 30 mars 2010 by jtoumit.<br>
 	 * @param pDivideByNbElements
 	 * @param pSquareDistance
 	 * @param pBestFor4
+	 * @param pMinusDistance
+	 * @param pUseMaxDistancePenalty
 	 */
-	public PuzzleAnalyzerDistances(boolean pDivideByNbElements, boolean pSquareDistance, int pBestFor4, int pMinusDistance)
+	public PuzzleAnalyzerDistances(boolean pDivideByNbElements, boolean pSquareDistance, int pBestFor4, int pMinusDistance, boolean pUseMaxDistancePenalty)
 	{
 		super();
 		mDivideByNbElements = pDivideByNbElements;
 		mSquareDistance = pSquareDistance;
 		mBestFor4 = pBestFor4;
 		mMinusDistance = pMinusDistance;
+		mUseMaxDistancePenalty = pUseMaxDistancePenalty;
 	}
 
 	@Override
@@ -84,20 +88,30 @@ public class PuzzleAnalyzerDistances implements IPuzzleAnalyzer
 			// For all groups with less than 4 elements in it, add some penalties
 			{
 				double maxDistance = 0;
+				minDistance = Integer.MAX_VALUE;
 				// get the biggest distance to the top of the grid
 				for (Point point : map.get(element))
 				{
 					double distance = distance(point, new Point(0, 0));
 					if (distance > maxDistance)
 						maxDistance = distance;
+					if (distance < minDistance)
+						minDistance = distance;
 					distance(point, new Point(pPuzzle.getWidth() - 1, 0));
 					if (distance > maxDistance)
 						maxDistance = distance;
+					if (distance < minDistance)
+						minDistance = distance;
 				}
-				if (mDivideByNbElements)
-					total += maxDistance / map.get(element).size();
+				double penalty;
+				if (mUseMaxDistancePenalty)
+					penalty = maxDistance;
 				else
-					total += maxDistance;
+					penalty = minDistance;
+				if (mDivideByNbElements)
+					total += penalty / map.get(element).size();
+				else
+					total += penalty;
 			}
 			else if (current < bestFor4)
 				bestFor4 = current / map.get(element).size();
