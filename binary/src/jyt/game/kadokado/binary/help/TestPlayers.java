@@ -22,8 +22,18 @@ public class TestPlayers
 		private int mBestFor4;
 		private int mMinusDistance;
 		private boolean mIncludeMinMax;
+		private boolean mUseMaxPenalty;
 
-		public OneTest(boolean pDivideByNbElements, boolean pSquareDistance, int pBestFor4, int pMinusDistance, boolean pIncludeMinMax)
+		/**
+		 * Created on 30 mars 2010 by jtoumit.<br>
+		 * @param pDivideByNbElements
+		 * @param pSquareDistance
+		 * @param pBestFor4
+		 * @param pMinusDistance
+		 * @param pIncludeMinMax
+		 * @param pUseMaxPenalty
+		 */
+		public OneTest(boolean pDivideByNbElements, boolean pSquareDistance, int pBestFor4, int pMinusDistance, boolean pIncludeMinMax, boolean pUseMaxPenalty)
 		{
 			super();
 			mDivideByNbElements = pDivideByNbElements;
@@ -31,6 +41,7 @@ public class TestPlayers
 			mBestFor4 = pBestFor4;
 			mMinusDistance = pMinusDistance;
 			mIncludeMinMax = pIncludeMinMax;
+			mUseMaxPenalty = pUseMaxPenalty;
 		}
 
 		@Override
@@ -49,7 +60,7 @@ public class TestPlayers
 			int min = Integer.MAX_VALUE;
 			int max = 0;
 			int total = 0;
-			int nbRun = 2000;
+			int nbRun = 10;
 			for (int i = 0; i < nbRun; i++)
 			{
 				int current = evaluate();
@@ -68,7 +79,7 @@ public class TestPlayers
 		private int evaluate()
 		{
 			ScoreComputer scoreComputer = new ScoreComputer();
-			int evaluate = new Player(new CombinationSearcher(new PuzzleAnalyzerDistances(mDivideByNbElements, mSquareDistance, mBestFor4, mMinusDistance))).play(new PuzzleBuilderRandom().buildPuzzle(), new PuzzleRefill(scoreComputer), scoreComputer);
+			int evaluate = new Player(new CombinationSearcher(new PuzzleAnalyzerDistances(mDivideByNbElements, mSquareDistance, mBestFor4, mMinusDistance, mUseMaxPenalty))).play(new PuzzleBuilderRandom().buildPuzzle(), new PuzzleRefill(scoreComputer), scoreComputer);
 			return evaluate;
 		}
 	}
@@ -80,24 +91,28 @@ public class TestPlayers
 		boolean bestSquare = false;
 		int bestFor4 = -1;
 		int bestMinusDistance = 0;
+		boolean bestMaxPenalty = false;
 		int current = 1;
 		int total = 2 * 2 * 2 * 12;
-		ExecutorService poolExecutor = Executors.newFixedThreadPool(4);
+		ExecutorService poolExecutor = Executors.newFixedThreadPool(2);
 		List<Future<OneTest>> futures = new ArrayList<Future<OneTest>>();
-		for (int minusDistance = 0; minusDistance < 2; minusDistance++)
+		for (int maxPenalty = 0; maxPenalty < 2; maxPenalty++)
 		{
-			for (int divides = 0; divides < 2; divides++)
+			for (int minusDistance = 0; minusDistance < 2; minusDistance++)
 			{
-				for (int squares = 0; squares < 2; squares++)
+				for (int divides = 0; divides < 2; divides++)
 				{
-					for (int best = -1; best <= 100; )
+					for (int squares = 0; squares < 2; squares++)
 					{
-						OneTest task = new OneTest(divides == 1, squares == 1, best, minusDistance, true);
-						futures.add(poolExecutor.submit(task, task));
-						if (best == -1)
-							best = 0;
-						else
-							best += 10;
+						for (int best = -1; best <= 100; )
+						{
+							OneTest task = new OneTest(divides == 1, squares == 1, best, minusDistance, true, maxPenalty == 1);
+							futures.add(poolExecutor.submit(task, task));
+							if (best == -1)
+								best = 0;
+							else
+								best += 10;
+						}
 					}
 				}
 			}
@@ -114,12 +129,13 @@ public class TestPlayers
 				bestSquare = test.mSquareDistance;
 				bestFor4 = test.mBestFor4;
 				bestMinusDistance = test.mMinusDistance;
+				bestMaxPenalty = test.mUseMaxPenalty;
 			}
 			if (current++ % 3 == 0)
-				System.out.println(((System.currentTimeMillis() - start) / 1000) + "s, " + current + " / " + total + ", currentBestHit: " + bestHit + ", currentBestDivide = " + bestDivide + ", currentBestSquare: " + bestSquare + ", currentBestFor4: " + bestFor4 + ", currentBestMinusDistance: " + bestMinusDistance);
+				System.out.println(((System.currentTimeMillis() - start) / 1000) + "s, " + current + " / " + total + ", currentBestHit: " + bestHit + ", currentBestDivide = " + bestDivide + ", currentBestSquare: " + bestSquare + ", currentBestFor4: " + bestFor4 + ", currentBestMinusDistance: " + bestMinusDistance + ", currentUseMaxPenalty: " + bestMaxPenalty);
 		}
 		poolExecutor.shutdown();
-		System.out.println("Best: " + bestDivide + ", " + bestSquare + ", " + bestFor4 + ", " + bestMinusDistance + ", " + bestHit);
+		System.out.println("Best: " + bestDivide + ", " + bestSquare + ", " + bestFor4 + ", " + bestMinusDistance + ", " + bestMaxPenalty + ", " + bestHit);
 	}
 
 }
