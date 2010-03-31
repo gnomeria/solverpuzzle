@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import jyt.game.puzzle.solving.Puzzle;
+import jyt.game.puzzle.solving.impl.Point;
 
 public class PuzzleAnalyzerDistances implements IPuzzleAnalyzer
 {

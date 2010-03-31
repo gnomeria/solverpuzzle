@@ -2,7 +2,7 @@
  * Created on 26 mars 2010
  * @author jtoumit
  */
-package jyt.game.kadokado.binary.help;
+package jyt.game.puzzle.solving.impl;
 
 public class Point
 {

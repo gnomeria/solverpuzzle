@@ -4,6 +4,8 @@
  */
 package jyt.game.kadokado.binary.help;
 
+import jyt.game.puzzle.solving.impl.Point;
+
 public class Zone
 {
 	private Point[] mPoints;

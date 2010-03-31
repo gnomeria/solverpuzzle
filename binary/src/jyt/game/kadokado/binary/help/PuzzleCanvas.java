@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import jyt.game.puzzle.solving.Puzzle;
+import jyt.game.puzzle.solving.impl.Point;
 import jyt.game.puzzle.solving.impl.actions.RotationClockWise;
 
 public class PuzzleCanvas extends Canvas
