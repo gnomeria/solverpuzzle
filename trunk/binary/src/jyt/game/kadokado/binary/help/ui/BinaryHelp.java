@@ -2,7 +2,7 @@
  * Created on 24 mars 2010
  * @author jtoumit
  */
-package jyt.game.kadokado.binary.help;
+package jyt.game.kadokado.binary.help.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,6 +14,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import jyt.game.kadokado.binary.help.Element;
+import jyt.game.kadokado.binary.help.PuzzleBuilderFromKado;
 import jyt.game.puzzle.solving.Puzzle;
 
 public class BinaryHelp extends JFrame

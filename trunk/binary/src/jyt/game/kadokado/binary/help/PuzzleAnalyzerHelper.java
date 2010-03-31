@@ -13,7 +13,7 @@ import jyt.game.puzzle.solving.impl.Point;
 
 public class PuzzleAnalyzerHelper
 {
-	static Zone[] getZones(Puzzle<Element> pPuzzle)
+	public static Zone[] getZones(Puzzle<Element> pPuzzle)
 	{
 		Puzzle<Element> puzzle = new Puzzle<Element>(pPuzzle);
 		List<Zone> zones = new ArrayList<Zone>();

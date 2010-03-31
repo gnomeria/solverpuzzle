@@ -2,12 +2,16 @@
  * Created on 24 mars 2010
  * @author jtoumit
  */
-package jyt.game.kadokado.binary.help;
+package jyt.game.kadokado.binary.help.ui;
 
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import jyt.game.kadokado.binary.help.Combination;
+import jyt.game.kadokado.binary.help.Element;
+import jyt.game.kadokado.binary.help.PuzzleAnalyzerHelper;
+import jyt.game.kadokado.binary.help.Zone;
 import jyt.game.puzzle.solving.Puzzle;
 import jyt.game.puzzle.solving.impl.Point;
 import jyt.game.puzzle.solving.impl.actions.RotationClockWise;

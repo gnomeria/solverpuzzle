@@ -2,7 +2,7 @@
  * Created on 27 mars 2010
  * @author jtoumit
  */
-package jyt.game.kadokado.binary.help;
+package jyt.game.kadokado.binary.help.ui;
 
 import java.awt.Canvas;
 import java.awt.Color;
@@ -10,6 +10,11 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 
+import jyt.game.kadokado.binary.help.Collapser;
+import jyt.game.kadokado.binary.help.Combination;
+import jyt.game.kadokado.binary.help.CombinationSearcher;
+import jyt.game.kadokado.binary.help.Element;
+import jyt.game.kadokado.binary.help.PuzzleAnalyzerDistances;
 import jyt.game.puzzle.solving.ActionManager;
 import jyt.game.puzzle.solving.Puzzle;
 import jyt.game.puzzle.solving.impl.actions.RotationClockWise;
