@@ -1,4 +1,4 @@
-package jyt.game.muxxu.kingdom.puzzle.help;
+package jyt.game.muxxu.kingdom.puzzle.help.ui;
 
 import java.awt.Robot;
 import java.awt.Rectangle;

@@ -4,6 +4,7 @@
  */
 package jyt.game.muxxu.kingdom.puzzle.help;
 
+
 public class ElementRecognitionData
 {
 	public static int sFirstX = 21;

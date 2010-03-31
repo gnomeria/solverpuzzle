@@ -2,10 +2,13 @@
  * Created on 24 janv. 2010
  * @author jtoumit
  */
-package jyt.game.muxxu.kingdom.puzzle.help;
+package jyt.game.muxxu.kingdom.puzzle.help.ui;
 
 import java.awt.Canvas;
 import java.awt.Graphics;
+
+import jyt.game.muxxu.kingdom.puzzle.help.Hint;
+import jyt.game.muxxu.kingdom.puzzle.help.PuzzleBuilder;
 
 public class HintListenerCanvas extends Canvas implements IHintListener
 {

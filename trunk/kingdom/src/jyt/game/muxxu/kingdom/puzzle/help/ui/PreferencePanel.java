@@ -1,4 +1,4 @@
-package jyt.game.muxxu.kingdom.puzzle.help;
+package jyt.game.muxxu.kingdom.puzzle.help.ui;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -8,6 +8,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import jyt.game.muxxu.kingdom.puzzle.help.Element;
 
 public class PreferencePanel extends JPanel
 {

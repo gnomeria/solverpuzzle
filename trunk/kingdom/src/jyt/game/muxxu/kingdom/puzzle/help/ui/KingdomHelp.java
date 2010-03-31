@@ -2,7 +2,7 @@
  * Created on 23 janv. 2010
  * @author jtoumit
  */
-package jyt.game.muxxu.kingdom.puzzle.help;
+package jyt.game.muxxu.kingdom.puzzle.help.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,6 +15,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import jyt.game.muxxu.kingdom.puzzle.help.Element;
+import jyt.game.muxxu.kingdom.puzzle.help.PuzzleBuilder;
 import jyt.game.puzzle.solving.Puzzle;
 
 public class KingdomHelp extends JFrame
