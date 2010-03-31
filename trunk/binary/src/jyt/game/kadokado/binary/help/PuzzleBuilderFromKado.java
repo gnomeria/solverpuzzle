@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Robot;
 
 import jyt.game.puzzle.solving.Puzzle;
+import jyt.game.puzzle.solving.impl.Point;
 
 public class PuzzleBuilderFromKado implements IPuzzleBuilder
 {

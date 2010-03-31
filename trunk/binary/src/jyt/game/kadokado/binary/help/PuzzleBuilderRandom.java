@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.util.Random;
 
 import jyt.game.puzzle.solving.Puzzle;
+import jyt.game.puzzle.solving.impl.Point;
 
 public class PuzzleBuilderRandom implements IPuzzleBuilder
 {

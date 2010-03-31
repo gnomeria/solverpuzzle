@@ -14,6 +14,7 @@ import jyt.game.puzzle.solving.ActionManager;
 import jyt.game.puzzle.solving.ICollapseListener;
 import jyt.game.puzzle.solving.ICollapser;
 import jyt.game.puzzle.solving.Puzzle;
+import jyt.game.puzzle.solving.impl.Point;
 import jyt.game.puzzle.solving.impl.actions.CollapseOne;
 
 public class Collapser implements ICollapser<Element>

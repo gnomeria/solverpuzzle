@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jyt.game.puzzle.solving.Puzzle;
+import jyt.game.puzzle.solving.impl.Point;
 
 public class PuzzleAnalyzerHelper
 {
