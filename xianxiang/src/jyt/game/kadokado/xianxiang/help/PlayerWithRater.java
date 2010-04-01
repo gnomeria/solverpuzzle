@@ -41,7 +41,7 @@ public class PlayerWithRater implements IPlayer
 		while ((combinations = mCombinationRater.getCombinations(pPuzzle)).length > 0)
 		{
 			Arrays.sort(combinations);
-			RatedCombination combination = combinations[0];
+			RatedCombination combination = combinations[combinations.length - 1];
 			mActionManager.executeActionAndCollapse(new ActionMatch(combination.getPoint1(), combination.getPoint2(), mScoreComputer));
 		}
 	}
