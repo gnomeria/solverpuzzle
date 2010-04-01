@@ -14,7 +14,9 @@ import javax.swing.SwingWorker;
 
 import jyt.game.kadokado.xianxiang.help.ActionMatch;
 import jyt.game.kadokado.xianxiang.help.CombinationRaterBestCurrentMove;
+import jyt.game.kadokado.xianxiang.help.CombinationRaterBestPotential;
 import jyt.game.kadokado.xianxiang.help.Element;
+import jyt.game.kadokado.xianxiang.help.ICombinationRater;
 import jyt.game.kadokado.xianxiang.help.IPlayer;
 import jyt.game.kadokado.xianxiang.help.PlayerWithRater;
 import jyt.game.kadokado.xianxiang.help.ScoreComputer;
@@ -56,7 +58,9 @@ public class PuzzleCanvas extends Canvas
 					{
 						ScoreComputer scoreComputer = new ScoreComputer();
 						ActionManager<Element> actionManager = new ActionManager<Element>(mPuzzle, new CollapserLazy<Element>());
-						IPlayer player = new PlayerWithRater(new CombinationRaterBestCurrentMove(scoreComputer), actionManager, scoreComputer);
+//						ICombinationRater combinationRater = new CombinationRaterBestCurrentMove(scoreComputer);
+						ICombinationRater combinationRater = new CombinationRaterBestPotential(scoreComputer);
+						IPlayer player = new PlayerWithRater(combinationRater, actionManager, scoreComputer);
 						actionManager.addActionListener(new IActionListener<Element>()
 						{
 							@Override

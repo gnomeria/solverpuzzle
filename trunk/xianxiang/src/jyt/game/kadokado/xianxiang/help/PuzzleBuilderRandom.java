@@ -16,7 +16,18 @@ public class PuzzleBuilderRandom implements IPuzzleBuilder
 	private static final InsidePattern[] INSIDE_PATTERN_VALUES = InsidePattern.values();
 	private static final Geometry[] GEOM_VALUES = Geometry.values();
 	private static final Colour[] COLOUR_VALUES = Colour.values();
-	private static final Random sRandom = new Random(System.currentTimeMillis());
+	private Random mRandom;
+
+	public PuzzleBuilderRandom()
+	{
+		this(new Random(System.currentTimeMillis()));
+	}
+
+	public PuzzleBuilderRandom(Random pRandom)
+	{
+		super();
+		mRandom = pRandom;
+	}
 
 	@Override
 	public Puzzle<Element> buildPuzzle()
@@ -26,7 +37,7 @@ public class PuzzleBuilderRandom implements IPuzzleBuilder
 		{
 			for (int y = 0; y < puzzle.getHeight(); y++)
 			{
-				puzzle.set(x, y, new Element(COLOUR_VALUES[sRandom.nextInt(COLOUR_VALUES.length)], GEOM_VALUES[sRandom.nextInt(GEOM_VALUES.length)], INSIDE_PATTERN_VALUES[sRandom.nextInt(INSIDE_PATTERN_VALUES.length)]));
+				puzzle.set(x, y, new Element(COLOUR_VALUES[mRandom.nextInt(COLOUR_VALUES.length)], GEOM_VALUES[mRandom.nextInt(GEOM_VALUES.length)], INSIDE_PATTERN_VALUES[mRandom.nextInt(INSIDE_PATTERN_VALUES.length)]));
 			}
 		}
 		return puzzle;
