@@ -15,7 +15,7 @@ import jyt.game.puzzle.solving.impl.CollapserLazy;
 public class CombinationRaterBestPotential implements ICombinationRater
 {
 	public enum DistanceFunction {LINEAR, SQUARE, SQRROOT, LOG, EXP};
-	private int mDivideScoreFactor;
+	private double mMultiplyScoreFactor;
 	private ScoreComputer mScoreComputer;
 	private int[] mFitnesses;
 	private DistanceFunction mDistanceFunction;
@@ -23,7 +23,7 @@ public class CombinationRaterBestPotential implements ICombinationRater
 
 	public CombinationRaterBestPotential(ScoreComputer pScoreComputer)
 	{
-		this(pScoreComputer, 5, new int[] {0, 0, 10, 1000}, DistanceFunction.SQRROOT, false);
+		this(pScoreComputer, 1, new int[] {0, 1, 10, 1000}, DistanceFunction.SQRROOT, false);
 	}
 
 	/**
@@ -33,11 +33,11 @@ public class CombinationRaterBestPotential implements ICombinationRater
 	 * @param pDistanceFunction 
 	 * @param pMinDistance 
 	 */
-	public CombinationRaterBestPotential(ScoreComputer pScoreComputer, int pDivideScoreFactor, int[] pFitnesses, DistanceFunction pDistanceFunction, boolean pMinDistance)
+	public CombinationRaterBestPotential(ScoreComputer pScoreComputer, double pMultiplyScoreFactor, int[] pFitnesses, DistanceFunction pDistanceFunction, boolean pMinDistance)
 	{
 		super();
 		mScoreComputer = pScoreComputer;
-		mDivideScoreFactor = pDivideScoreFactor;
+		mMultiplyScoreFactor = pMultiplyScoreFactor;
 		mFitnesses = pFitnesses;
 		mDistanceFunction = pDistanceFunction;
 		mMinDistance = pMinDistance;
@@ -57,7 +57,7 @@ public class CombinationRaterBestPotential implements ICombinationRater
 			int afterPotential = computePotential(pPuzzle);
 			int afterScore = mScoreComputer.getCurrentScore();
 			actionManager.rollBack();
-			double rating = afterPotential - beforePotential + (afterScore - beforeScore) / mDivideScoreFactor;
+			double rating = afterPotential - beforePotential + (afterScore - beforeScore) * mMultiplyScoreFactor;
 			if (ratedCombinations.isEmpty() || (ratedCombinations.first().getRating() < rating))
 			{
 				if (ratedCombinations.size() > 10)
