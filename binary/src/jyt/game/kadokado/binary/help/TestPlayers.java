@@ -60,7 +60,7 @@ public class TestPlayers
 			int min = Integer.MAX_VALUE;
 			int max = 0;
 			int total = 0;
-			int nbRun = 10;
+			int nbRun = 1000;
 			for (int i = 0; i < nbRun; i++)
 			{
 				int current = evaluate();
@@ -86,15 +86,10 @@ public class TestPlayers
 
 	public static void main(String[] args) throws InterruptedException, ExecutionException
 	{
-		int bestHit = 0;
-		boolean bestDivide = false;
-		boolean bestSquare = false;
-		int bestFor4 = -1;
-		int bestMinusDistance = 0;
-		boolean bestMaxPenalty = false;
+		OneTest bestTest = null;
 		int current = 1;
-		int total = 2 * 2 * 2 * 12;
-		ExecutorService poolExecutor = Executors.newFixedThreadPool(2);
+		int total = 2 * 2 * 2 * 2 * 12;
+		ExecutorService poolExecutor = Executors.newFixedThreadPool(4);
 		List<Future<OneTest>> futures = new ArrayList<Future<OneTest>>();
 		for (int maxPenalty = 0; maxPenalty < 2; maxPenalty++)
 		{
@@ -122,20 +117,20 @@ public class TestPlayers
 		{
 			OneTest test = future.get();
 			
-			if (test.getResult() > bestHit)
+			if ((bestTest == null) || (test.getResult() > bestTest.getResult()))
 			{
-				bestHit = test.getResult();
-				bestDivide = test.mDivideByNbElements;
-				bestSquare = test.mSquareDistance;
-				bestFor4 = test.mBestFor4;
-				bestMinusDistance = test.mMinusDistance;
-				bestMaxPenalty = test.mUseMaxPenalty;
+				bestTest = test;
 			}
 			if (current++ % 3 == 0)
-				System.out.println(((System.currentTimeMillis() - start) / 1000) + "s, " + current + " / " + total + ", currentBestHit: " + bestHit + ", currentBestDivide = " + bestDivide + ", currentBestSquare: " + bestSquare + ", currentBestFor4: " + bestFor4 + ", currentBestMinusDistance: " + bestMinusDistance + ", currentUseMaxPenalty: " + bestMaxPenalty);
+				printCurrentResult(bestTest, current, total, start);
 		}
 		poolExecutor.shutdown();
-		System.out.println("Best: " + bestDivide + ", " + bestSquare + ", " + bestFor4 + ", " + bestMinusDistance + ", " + bestMaxPenalty + ", " + bestHit);
+		System.out.println("Done");
+	}
+
+	private static void printCurrentResult(OneTest pBestTest, int pCurrent, int pTotal, long pStart)
+	{
+		System.out.println(((System.currentTimeMillis() - pStart) / 1000) + "s, " + pCurrent + " / " + pTotal + ", currentBestHit: " + pBestTest.mResult + ", currentBestDivide = " + pBestTest.mDivideByNbElements + ", currentBestSquare: " + pBestTest.mSquareDistance + ", currentBestFor4: " + pBestTest.mBestFor4 + ", currentBestMinusDistance: " + pBestTest.mMinusDistance + ", currentUseMaxPenalty: " + pBestTest.mUseMaxPenalty);
 	}
 
 }
