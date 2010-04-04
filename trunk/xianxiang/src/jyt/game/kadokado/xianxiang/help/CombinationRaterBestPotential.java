@@ -15,33 +15,35 @@ import jyt.game.puzzle.solving.impl.CollapserLazy;
 public class CombinationRaterBestPotential implements ICombinationRater
 {
 	public enum DistanceFunction {LINEAR, SQUARE, SQRROOT, LOG, EXP};
-	private double mMultiplyScoreFactor;
+	public enum ScoreFactorFunction {LINEAR, LOG, SQRROOT};
+	public enum ScoreFactorEffect {NONE, DIVIDE, MULTIPLY};
+
 	private ScoreComputer mScoreComputer;
+	private double mMultiplyScoreFactor;
 	private int[] mFitnesses;
 	private DistanceFunction mDistanceFunction;
 	private boolean mMinDistance;
+	private ScoreFactorFunction mScoreFactorFunction;
+	private ScoreFactorEffect mScoreFactorEffect;
 
 	public CombinationRaterBestPotential(ScoreComputer pScoreComputer)
 	{
-		this(pScoreComputer, 1, new int[] {0, 1, 10, 1000}, DistanceFunction.SQRROOT, false);
+		this(pScoreComputer, 0.08, new int[] {0, 1, 13, 104}, DistanceFunction.LINEAR, true, ScoreFactorFunction.LOG, ScoreFactorEffect.MULTIPLY);
 	}
 
-	/**
-	 * Created on 1 avr. 2010 by jtoumit.<br>
-	 * @param pScoreComputer
-	 * @param pFitnesses 
-	 * @param pDistanceFunction 
-	 * @param pMinDistance 
-	 */
-	public CombinationRaterBestPotential(ScoreComputer pScoreComputer, double pMultiplyScoreFactor, int[] pFitnesses, DistanceFunction pDistanceFunction, boolean pMinDistance)
+
+	public CombinationRaterBestPotential(ScoreComputer pScoreComputer, double pMultiplyScoreFactor, int[] pFitnesses, DistanceFunction pDistanceFunction, boolean pMinDistance, ScoreFactorFunction pScoreFactorFunction, ScoreFactorEffect pScoreFactorEffect)
 	{
 		super();
-		mScoreComputer = pScoreComputer;
 		mMultiplyScoreFactor = pMultiplyScoreFactor;
+		mScoreComputer = pScoreComputer;
 		mFitnesses = pFitnesses;
 		mDistanceFunction = pDistanceFunction;
 		mMinDistance = pMinDistance;
+		mScoreFactorFunction = pScoreFactorFunction;
+		mScoreFactorEffect = pScoreFactorEffect;
 	}
+
 
 	@Override
 	public RatedCombination[] getCombinations(Puzzle<Element> pPuzzle)
@@ -57,7 +59,32 @@ public class CombinationRaterBestPotential implements ICombinationRater
 			int afterPotential = computePotential(pPuzzle);
 			int afterScore = mScoreComputer.getCurrentScore();
 			actionManager.rollBack();
-			double rating = afterPotential - beforePotential + (afterScore - beforeScore) * mMultiplyScoreFactor;
+			double scoreFactor = mMultiplyScoreFactor;
+			double factorForFactor = 0;
+			switch (mScoreFactorFunction)
+			{
+			case LINEAR:
+				factorForFactor = beforePotential;
+				break;
+			case LOG:
+				factorForFactor = Math.log(beforePotential);
+				break;
+			case SQRROOT:
+				factorForFactor = Math.log(beforePotential);
+				break;
+			}
+			switch (mScoreFactorEffect)
+			{
+			case DIVIDE:
+				scoreFactor /= factorForFactor;
+				break;
+			case MULTIPLY:
+				scoreFactor *= factorForFactor;
+				break;
+			default:
+				break;
+			}
+			double rating = afterPotential - beforePotential + (afterScore - beforeScore) * scoreFactor;
 			if (ratedCombinations.isEmpty() || (ratedCombinations.first().getRating() < rating))
 			{
 				if (ratedCombinations.size() > 10)
