@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import jyt.game.kadokado.xianxiang.help.Element;
+import jyt.game.kadokado.xianxiang.help.PuzzleBuilderKadoKado;
 import jyt.game.kadokado.xianxiang.help.PuzzleBuilderRandom;
 import jyt.game.puzzle.solving.Puzzle;
 
@@ -30,8 +31,8 @@ public class XianXiangHelp extends JFrame
 		setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 		JPanel inside = new JPanel();
 		inside.setLayout(new BoxLayout(inside, BoxLayout.X_AXIS));
-		mPuzzle = new PuzzleBuilderRandom().buildPuzzle();
-//		mPuzzle = new PuzzleBuilderFromKado().buildPuzzle();
+//		mPuzzle = new PuzzleBuilderRandom().buildPuzzle();
+		mPuzzle = new PuzzleBuilderKadoKado().buildPuzzle();
 		inside.add(mPuzzleCanvas = new PuzzleCanvas(mPuzzle));
 //		mHintCanvas = new HintCanvas(mPuzzleCanvas);
 //		inside.add(mHintCanvas);

@@ -196,7 +196,7 @@ public class CombinationRaterBestPotential implements ICombinationRater
 				distance = (int)Math.exp(distance);
 				break;
 			case LOG:
-				distance = (int)(Math.log(distance) + 1);;
+				distance = (int)(Math.log(distance) + 1);
 				break;
 			case SQRROOT:
 				distance = (int)Math.sqrt(distance);
