@@ -13,7 +13,6 @@ import java.awt.event.MouseEvent;
 import javax.swing.SwingWorker;
 
 import jyt.game.kadokado.xianxiang.help.ActionMatch;
-import jyt.game.kadokado.xianxiang.help.CombinationRaterBestCurrentMove;
 import jyt.game.kadokado.xianxiang.help.CombinationRaterBestPotential;
 import jyt.game.kadokado.xianxiang.help.Element;
 import jyt.game.kadokado.xianxiang.help.ICombinationRater;
@@ -74,7 +73,7 @@ public class PuzzleCanvas extends Canvas
 									repaint();
 									try
 									{
-										Thread.sleep(5000);
+										Thread.sleep(15000);
 									}
 									catch (InterruptedException e)
 									{

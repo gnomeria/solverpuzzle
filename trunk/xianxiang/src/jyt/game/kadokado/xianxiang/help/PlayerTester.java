@@ -45,7 +45,7 @@ public class PlayerTester
 		@Override
 		public void run()
 		{
-			mScore = play(mMultiply, mFitnesses, mDistanceFunction, mMin, mScoreFactorEffect, mScoreFactorFunction, 100);
+			mScore = play(mMultiply, mFitnesses, mDistanceFunction, mMin, mScoreFactorEffect, mScoreFactorFunction, 1000);
 		}
 	}
 
@@ -53,29 +53,32 @@ public class PlayerTester
 	{
 		ExecutorService poolExecutor = Executors.newFixedThreadPool(4);
 		List<Future<OneTest>> futures = new ArrayList<Future<OneTest>>();
-		for (double multiply = 0.01; multiply < 20; multiply *= 2)
-		{
-			for (int fitnesses2 = 2; fitnesses2 < 20; fitnesses2 *= 1.5)
-			{
-				for (int fitnesses3 = fitnesses2 * 2; fitnesses3 < fitnesses2 * 100; fitnesses3 *= 2)
-				{
-					for (DistanceFunction distanceFunction : DistanceFunction.values())
-					{
-						for (ScoreFactorEffect scoreFactorEffect : ScoreFactorEffect.values())
-						{
-							for (ScoreFactorFunction scoreFactorFunction : ScoreFactorFunction.values())
-							{
-								for (int minDistance = 0; minDistance < 2; minDistance++)
-								{
-									OneTest task = new OneTest(multiply, new int[] {0, 1, fitnesses2, fitnesses3}, distanceFunction, scoreFactorEffect, scoreFactorFunction, minDistance == 1);
-									futures.add(poolExecutor.submit(task, task));
-								}
-							}
-						}
-					}
-				}
-			}
-		}
+//		for (double multiply = 0.01; multiply < 20; multiply *= 2)
+//		{
+//			for (int fitnesses2 = 2; fitnesses2 < 20; fitnesses2 *= 1.5)
+//			{
+//				for (int fitnesses3 = fitnesses2 * 2; fitnesses3 < fitnesses2 * 100; fitnesses3 *= 2)
+//				{
+//					for (DistanceFunction distanceFunction : DistanceFunction.values())
+//					{
+//						for (ScoreFactorEffect scoreFactorEffect : ScoreFactorEffect.values())
+//						{
+//							for (ScoreFactorFunction scoreFactorFunction : ScoreFactorFunction.values())
+//							{
+//								for (int minDistance = 0; minDistance < 2; minDistance++)
+//								{
+//									OneTest task = new OneTest(multiply, new int[] {0, 1, fitnesses2, fitnesses3}, distanceFunction, scoreFactorEffect, scoreFactorFunction, minDistance == 1);
+//									futures.add(poolExecutor.submit(task, task));
+//								}
+//							}
+//						}
+//					}
+//				}
+//			}
+//		}
+		OneTest task = new OneTest(0.08, new int[] {0, 1, 13, 104}, DistanceFunction.LINEAR, ScoreFactorEffect.MULTIPLY, ScoreFactorFunction.LOG, true);
+//		OneTest task = new OneTest(0.16, new int[] {0, 1, 13, 104}, DistanceFunction.LINEAR, ScoreFactorEffect.MULTIPLY, ScoreFactorFunction.LOG, true);
+		futures.add(poolExecutor.submit(task, task));
 		long start = System.currentTimeMillis();
 		OneTest bestTest = null;
 		for (Future<OneTest> future : futures)
