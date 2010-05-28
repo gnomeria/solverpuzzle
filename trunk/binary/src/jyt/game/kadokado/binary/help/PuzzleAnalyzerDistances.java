@@ -22,7 +22,7 @@ public class PuzzleAnalyzerDistances implements IPuzzleAnalyzer
 
 	public PuzzleAnalyzerDistances()
 	{
-		this(false, false, 80, 0, false);
+		this(true, false, 70, 0, true);
 	}
 
 	/**
