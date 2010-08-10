@@ -27,6 +27,7 @@ public class BinaryHelp extends JFrame
 	public BinaryHelp()
 	{
 		super();
+		setAlwaysOnTop(true);
 		setBounds(0, 0, 600, 350);
 		setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 		JPanel inside = new JPanel();
