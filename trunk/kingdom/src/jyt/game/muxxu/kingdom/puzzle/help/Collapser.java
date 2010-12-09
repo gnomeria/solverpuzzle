@@ -30,9 +30,9 @@ public class Collapser implements ICollapser<Element>
 				Arrays.fill(used[i], false);
 
 			oneCollapse = false;
-			for (int x = 0; x < pPuzzle.getWidth(); x++)
+			for (int y = 0; y < pPuzzle.getHeight(); y++)
 			{
-				for (int y = 0; y < pPuzzle.getHeight(); y++)
+				for (int x = 0; x < pPuzzle.getWidth(); x++)
 				{
 					Element elt = pPuzzle.get(x, y);
 					if ((elt != null) && (!used[x][y]))
