@@ -94,9 +94,9 @@ public class PuzzleBuilder
 				{
 					Object squareElement = getSquareElement(robot, mLastX + i * SQUARE_SIZE + 1, mLastY + j * SQUARE_SIZE + 1, (i + j) % 2 == 0);
 					puzzle.set(i, j, (Element)squareElement);
-//					System.out.print("" + squareElement + "\t");
+					System.out.print("" + squareElement + "\t");
 				}
-//				System.out.println();
+				System.out.println();
 			}
 		}
 		return puzzle;
