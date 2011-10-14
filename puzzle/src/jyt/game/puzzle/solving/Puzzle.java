@@ -4,11 +4,18 @@
  */
 package jyt.game.puzzle.solving;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import jyt.game.puzzle.solving.impl.Point;
 
 public class Puzzle<T>
 {
 	private T[][] mGrid;
+	private Map<T, List<Point>> mElementsMap = null;
+	private Integer mTotalPoints = null;
 
 	@SuppressWarnings("unchecked")
 	public Puzzle(int pWidth, int pHeight)
@@ -43,6 +50,8 @@ public class Puzzle<T>
 	public void set(int x, int y, T pElement)
 	{
 		mGrid[x][y] = pElement;
+		mElementsMap = null;
+		mTotalPoints = null;
 	}
 
 	public void set(Point pPoint, T pElement)
@@ -59,6 +68,43 @@ public class Puzzle<T>
 	{
 		return mGrid[0].length;
 	}
+
+	public Map<T, List<Point>> getElementsMap()
+	{
+		if (mElementsMap == null)
+		// If it was reset, recompute the cache
+		{
+			mElementsMap = new HashMap<T, List<Point>>();
+			for (int x = 0; x < getWidth(); x++)
+			{
+				for (int y = 0; y < getHeight(); y++)
+				{
+					T element = get(x, y);
+					if (element != null)
+					{
+						List<Point> elements = mElementsMap.get(element);
+						if (elements == null)
+							mElementsMap.put(element, elements = new ArrayList<Point>());
+						elements.add(new Point(x, y));
+					}
+				}
+			}
+		}
+		return mElementsMap;
+	}
+
+	public int getTotalPoints()
+	{
+		if (mTotalPoints == null)
+		{
+			int total = 0;
+			for (List<Point> list : getElementsMap().values())
+				total += list.size();
+			mTotalPoints = total;
+		}
+		return mTotalPoints;
+	}
+
 	@Override
 	public String toString()
 	{

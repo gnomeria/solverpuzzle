@@ -14,7 +14,7 @@ import jyt.game.kadokado.binary.help.Collapser;
 import jyt.game.kadokado.binary.help.Combination;
 import jyt.game.kadokado.binary.help.CombinationSearcher;
 import jyt.game.kadokado.binary.help.Element;
-import jyt.game.kadokado.binary.help.PuzzleAnalyzerDistances;
+import jyt.game.kadokado.binary.help.impl.analyzers.PuzzleAnalyzerDistances;
 import jyt.game.puzzle.solving.ActionManager;
 import jyt.game.puzzle.solving.Puzzle;
 import jyt.game.puzzle.solving.impl.actions.RotationClockWise;

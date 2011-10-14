@@ -6,6 +6,7 @@ package jyt.game.kadokado.binary.help.ui;
 
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 
 import jyt.game.kadokado.binary.help.Combination;
@@ -67,10 +68,21 @@ public class PuzzleCanvas extends Canvas
 			if (mCurrentCombination != null)
 			{
 				pG.setColor(Color.black);
+				pG.setFont(new Font("Dialog", Font.BOLD, 14));
 				int current = 1;
 				for (RotationClockWise<Element> rotation : mCurrentCombination.getRotations())
 				{
-					pG.drawString(String.valueOf(current), rotation.getX() * SQUARE_SIZE + SQUARE_SIZE - 5, rotation.getY() * SQUARE_SIZE + SQUARE_SIZE - 5);
+					int posx = rotation.getX() * SQUARE_SIZE + SQUARE_SIZE - 5 + (current == 2 ? 7 : 0);
+					int posy = rotation.getY() * SQUARE_SIZE + SQUARE_SIZE - 5 + (current == 3 ? 14 : 0);
+					String text = String.valueOf(current);
+					pG.setColor(Color.white);
+					pG.setFont(new Font("Dialog", Font.BOLD, 14));
+					pG.drawString(text, posx - 1, posy - 1);
+					pG.drawString(text, posx + 1, posy + 1);
+					pG.drawString(text, posx - 1, posy + 1);
+					pG.drawString(text, posx + 1, posy - 1);
+					pG.setColor(Color.black);
+					pG.drawString(text, posx, posy);
 					current++;
 				}
 			}
