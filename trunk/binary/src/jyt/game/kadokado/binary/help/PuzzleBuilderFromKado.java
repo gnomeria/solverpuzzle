@@ -18,7 +18,7 @@ public class PuzzleBuilderFromKado implements IPuzzleBuilder
 	private static final int X_INTERVAL = 40;
 	private static final int Y_INTERVAL = 40;
 
-	private Point mInitialPoint = new Point(413, 349);
+	private Point mInitialPoint = new Point(2100, 301);
 
 	public PuzzleBuilderFromKado()
 	{
@@ -81,9 +81,12 @@ public class PuzzleBuilderFromKado implements IPuzzleBuilder
 		for (int x = -3000; x < 3500; x++)
 			if (checkPosition(pRobot, x, pInitialY))
 				return new Point(x, pInitialY);
+		for (int y = 0; y < 2000; y++)
+			if (checkPosition(pRobot, pInitialX, y))
+				return new Point(pInitialX, y);
 		for (int x = -1000; x < 3000; x++)
 		{
-			for (int y = pInitialY - 300; y < pInitialY + 300; y++)
+			for (int y = pInitialY - 500; y < pInitialY + 500; y++)
 			{
 				if (y == pInitialY)
 					break;
@@ -105,17 +108,20 @@ public class PuzzleBuilderFromKado implements IPuzzleBuilder
 //			}
 //		}
 //		return true;
+		int r = 86;
+		int g = 183;
+		int b = 193;
 		for (int x = 0; x < 15; x++)
 		{
-			if (!pRobot.getPixelColor(x + pCurrentX, pCurrentY).equals(new Color(82, 182, 198)))
+			if (!pRobot.getPixelColor(x + pCurrentX, pCurrentY).equals(new Color(r, g, b)))
 				return false;
 		}
 		for (int y = 0; y < 15; y++)
 		{
-			if (!pRobot.getPixelColor(pCurrentX, y + pCurrentY).equals(new Color(82, 182, 198)))
+			if (!pRobot.getPixelColor(pCurrentX, y + pCurrentY).equals(new Color(r, g, b)))
 				return false;
 		}
-		if (pRobot.getPixelColor(pCurrentX + 1, pCurrentY + 1).equals(new Color(82, 182, 198)))
+		if (pRobot.getPixelColor(pCurrentX + 1, pCurrentY + 1).equals(new Color(r, g, b)))
 			return false;
 		return true;
 	}

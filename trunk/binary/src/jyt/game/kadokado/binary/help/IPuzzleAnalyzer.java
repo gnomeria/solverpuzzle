@@ -9,4 +9,5 @@ import jyt.game.puzzle.solving.Puzzle;
 public interface IPuzzleAnalyzer
 {
 	double computeFitness(Puzzle<Element> pPuzzle);
+	String description();
 }

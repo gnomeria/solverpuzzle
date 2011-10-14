@@ -2,13 +2,15 @@
  * Created on 27 mars 2010
  * @author jtoumit
  */
-package jyt.game.kadokado.binary.help;
+package jyt.game.kadokado.binary.help.impl.analyzers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import jyt.game.kadokado.binary.help.Element;
+import jyt.game.kadokado.binary.help.IPuzzleAnalyzer;
 import jyt.game.puzzle.solving.Puzzle;
 import jyt.game.puzzle.solving.impl.Point;
 
@@ -19,10 +21,11 @@ public class PuzzleAnalyzerDistances implements IPuzzleAnalyzer
 	private int mBestFor4;
 	private int mMinusDistance;
 	private boolean mUseMaxDistancePenalty;
+	private boolean mUsePenalty4;
 
 	public PuzzleAnalyzerDistances()
 	{
-		this(false, false, 80, 0, false);
+		this(true, false, 70, 0, true, true);
 	}
 
 	/**
@@ -33,7 +36,7 @@ public class PuzzleAnalyzerDistances implements IPuzzleAnalyzer
 	 * @param pMinusDistance
 	 * @param pUseMaxDistancePenalty
 	 */
-	public PuzzleAnalyzerDistances(boolean pDivideByNbElements, boolean pSquareDistance, int pBestFor4, int pMinusDistance, boolean pUseMaxDistancePenalty)
+	public PuzzleAnalyzerDistances(boolean pDivideByNbElements, boolean pSquareDistance, int pBestFor4, int pMinusDistance, boolean pUseMaxDistancePenalty, boolean pUsePenalty4)
 	{
 		super();
 		mDivideByNbElements = pDivideByNbElements;
@@ -46,22 +49,7 @@ public class PuzzleAnalyzerDistances implements IPuzzleAnalyzer
 	@Override
 	public double computeFitness(Puzzle<Element> pPuzzle)
 	{
-		Map<Element, List<Point>> map = new HashMap<Element, List<Point>>();
-		// First gather information about groups of elements of the same colour
-		for (int x = 0; x < pPuzzle.getWidth(); x++)
-		{
-			for (int y = 0; y < pPuzzle.getHeight(); y++)
-			{
-				Element element = pPuzzle.get(x, y);
-				if (element != null)
-				{
-					List<Point> colors = map.get(element.getColor());
-					if (colors == null)
-						map.put(element, colors = new ArrayList<Point>());
-					colors.add(new Point(x, y));
-				}
-			}
-		}
+		Map<Element, List<Point>> map = pPuzzle.getElementsMap();
 		double total = 0;
 		double bestFor4 = mBestFor4;
 		for (Element element : map.keySet())
@@ -93,12 +81,18 @@ public class PuzzleAnalyzerDistances implements IPuzzleAnalyzer
 				// get the biggest distance to the top of the grid
 				for (Point point : map.get(element))
 				{
-					double distance = distance(point, new Point(0, 0));
+					/*double distance = distance(point, new Point(0, 0));
 					if (distance > maxDistance)
 						maxDistance = distance;
 					if (distance < minDistance)
 						minDistance = distance;
 					distance(point, new Point(pPuzzle.getWidth() - 1, 0));
+					if (distance > maxDistance)
+						maxDistance = distance;
+					if (distance < minDistance)
+						minDistance = distance;*/
+
+					double distance = distance(point, new Point(pPuzzle.getWidth() / 2, 0));
 					if (distance > maxDistance)
 						maxDistance = distance;
 					if (distance < minDistance)
@@ -138,6 +132,6 @@ public class PuzzleAnalyzerDistances implements IPuzzleAnalyzer
 	@Override
 	public String description()
 	{
-		return "Distances";
+		return "MultiDist";
 	}
 }
