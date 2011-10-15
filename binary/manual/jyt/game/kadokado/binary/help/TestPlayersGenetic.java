@@ -25,7 +25,7 @@ import javax.swing.JFrame;
 public class TestPlayersGenetic extends JFrame
 {
 	private static final Random mRandom = new Random(System.currentTimeMillis());
-	private Double[][] allResults;
+	private Double[][] mAllResults;
 	private int mCurrentRun;
 
 	public TestPlayersGenetic()
@@ -45,10 +45,10 @@ public class TestPlayersGenetic extends JFrame
 	private void run() throws InterruptedException, ExecutionException
 	{
 		OneTest bestTest = null;
-		int nbRun = 100;
+		int nbRun = 20;
 		List<OneTest> individuals = new ArrayList<OneTest>();
-		ExecutorService poolExecutor = Executors.newFixedThreadPool(3);
-		for (int i = 0; i < 50; i++)
+		ExecutorService poolExecutor = Executors.newFixedThreadPool(5);
+		for (int i = 0; i < 500; i++)
 			individuals.add(new OneTest(createRandomWeights(), nbRun));
 		long start = System.currentTimeMillis();
 		for (mCurrentRun = 0; mCurrentRun < 100; mCurrentRun++)
@@ -63,7 +63,7 @@ public class TestPlayersGenetic extends JFrame
 				OneTest test = future.get();
 				if ((bestTest == null) || (test.getResult() > bestTest.getResult()))
 					bestTest = test;
-				allResults[mCurrentRun][currentIndividual++] = new Double(test.getResult());
+				mAllResults[mCurrentRun][currentIndividual++] = new Double(test.getResult());
 				repaint();
 				System.out.print("*");
 			}
@@ -110,15 +110,15 @@ public class TestPlayersGenetic extends JFrame
 	public void paint(Graphics g)
 	{
 		super.paint(g);
-		for (int i = 0; i < Math.min(mCurrentRun + 1, allResults.length); i++)
+		for (int i = 0; i < Math.min(mCurrentRun + 1, mAllResults.length); i++)
 		{
-			for (int j = 0; j < allResults[i].length; j++)
+			for (int j = 0; j < mAllResults[i].length; j++)
 			{
-				if (allResults[i][j] != null)
+				if (mAllResults[i][j] != null)
 				{
 					int c = 200 - (200 * i / (mCurrentRun + 1));
 					g.setColor(new Color(c, c, c));
-					g.drawRect(j * 2, (int)(allResults[i][j].doubleValue() * 350 / 100000), 1, 1);
+					g.drawRect(j * 2, (int)(mAllResults[i][j].doubleValue() * 350 / 100000), 1, 1);
 				}
 			}
 		}
@@ -127,9 +127,9 @@ public class TestPlayersGenetic extends JFrame
 	public static void main(String[] args) throws InterruptedException, ExecutionException
 	{
 		TestPlayersGenetic frame = new TestPlayersGenetic();
-		frame.allResults = new Double[100][];
-		for (int i = 0; i < frame.allResults.length; i++)
-			frame.allResults[i] = new Double[100];
+		frame.mAllResults = new Double[100][];
+		for (int i = 0; i < frame.mAllResults.length; i++)
+			frame.mAllResults[i] = new Double[500];
 		frame.setVisible(true);
 		frame.run();
 	}
