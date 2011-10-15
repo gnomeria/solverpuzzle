@@ -23,6 +23,14 @@ import jyt.game.puzzle.solving.impl.Point;
  */
 public class PuzzleAnalyzerOrphans implements IPuzzleAnalyzer
 {
+	private double mDistance;
+
+	public PuzzleAnalyzerOrphans(double pDistance)
+	{
+		super();
+		mDistance = pDistance / 30 + 1;
+	}
+
 	@Override
 	public double computeFitness(Puzzle<Element> pPuzzle)
 	{
@@ -33,7 +41,7 @@ public class PuzzleAnalyzerOrphans implements IPuzzleAnalyzer
 			// The goal is to find the best group
 			List<Point> points = new ArrayList<Point>(elements.get(element));
 			// Create aggregates
-			List<List<Point>> aggregates = PuzzleAnalyzerHelper.createAggregates(points, 3);
+			List<List<Point>> aggregates = PuzzleAnalyzerHelper.createAggregates(points, mDistance);
 			for (List<Point> aggregate : aggregates)
 			{
 				PointDouble center = PuzzleAnalyzerHelper.getGravityCenter(aggregate);
@@ -48,6 +56,6 @@ public class PuzzleAnalyzerOrphans implements IPuzzleAnalyzer
 	@Override
 	public String description()
 	{
-		return "Orphans";
+		return "Orphans(" + mDistance + ")";
 	}
 }

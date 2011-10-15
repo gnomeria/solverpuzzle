@@ -16,6 +16,14 @@ import jyt.game.puzzle.solving.impl.Point;
 
 public class PuzzleAnalyzer4Blocks implements IPuzzleAnalyzer
 {
+	private double mFitness;
+
+	public PuzzleAnalyzer4Blocks(double pFitness)
+	{
+		super();
+		mFitness = pFitness / 30 + 1;
+	}
+
 	@Override
 	public double computeFitness(Puzzle<Element> pPuzzle)
 	{
@@ -25,7 +33,7 @@ public class PuzzleAnalyzer4Blocks implements IPuzzleAnalyzer
 		{
 			// The goal is to find the best group
 			List<Point> points = new ArrayList<Point>(elements.get(element));
-			List<List<Point>> aggregates = PuzzleAnalyzerHelper.createAggregates(points, 3);
+			List<List<Point>> aggregates = PuzzleAnalyzerHelper.createAggregates(points, mFitness);
 			for (List<Point> aggregate : aggregates)
 				if (aggregate.size() >= 4)
 					nbAggregatesFound *= 2;
@@ -38,6 +46,6 @@ public class PuzzleAnalyzer4Blocks implements IPuzzleAnalyzer
 	@Override
 	public String description()
 	{
-		return "4Blocks";
+		return "4Blocks(" + mFitness + ")";
 	}
 }

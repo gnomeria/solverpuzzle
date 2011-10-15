@@ -69,12 +69,12 @@ public class TestPlayersGenetic extends JFrame
 		frame.setVisible(true);
 		
 		OneTest bestTest = null;
-		int nbRun = 100;
+		int nbRun = 30;
 		List<OneTest> individuals = new ArrayList<OneTest>();
-		ExecutorService poolExecutor = Executors.newFixedThreadPool(3);
-		for (int i = 0; i < 30; i++)
+		ExecutorService poolExecutor = Executors.newFixedThreadPool(4);
+		for (int i = 0; i < 20; i++)
 		{
-			double[] weights = new double[] {mRandom.nextDouble() * 100, mRandom.nextDouble() * 100, mRandom.nextDouble() * 100, mRandom.nextDouble() * 100, mRandom.nextDouble() * 100, mRandom.nextDouble() * 100};
+			double[] weights = new double[] {mRandom.nextDouble() * 100, mRandom.nextDouble() * 100, mRandom.nextDouble() * 100, mRandom.nextDouble() * 100, mRandom.nextDouble() * 100, mRandom.nextDouble() * 100, mRandom.nextDouble() * 100, mRandom.nextDouble() * 100};
 			individuals.add(new OneTest(weights, nbRun));
 		}
 		long start = System.currentTimeMillis();
