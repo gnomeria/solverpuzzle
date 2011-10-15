@@ -26,7 +26,7 @@ public class PuzzleAnalyzerMultiplyer implements IPuzzleAnalyzer
 	@Override
 	public String description()
 	{
-		return mWrappedAnalyzer.description() + "x" + PuzzleAnalyzerHelper.readableDouble(mFactor);
+		return "(" + mWrappedAnalyzer.description() + "x" + PuzzleAnalyzerHelper.readableDouble(mFactor) + ")";
 	}
 
 }

@@ -42,8 +42,8 @@ public class PuzzleAnalyzerCombiner implements IPuzzleAnalyzer
 		for (int i = 0; i < mAnalyzers.length; i++)
 		{
 			if (i > 0)
-				b.append(", ");
-			b.append(mAnalyzers[i].description()).append(": ").append(PuzzleAnalyzerHelper.readableDouble(mWeights[i]));
+				b.append(" + ");
+			b.append(mAnalyzers[i].description()).append("x").append(PuzzleAnalyzerHelper.readableDouble(mWeights[i]));
 		}
 		return b.toString();
 	}
