@@ -72,14 +72,19 @@ class OneTest implements Runnable
 		ScoreComputer scoreComputer = new ScoreComputer();
 		int w = 0;
 		PuzzleAnalyzerExp distances = new PuzzleAnalyzerExp(new PuzzleAnalyzerMultiplyer(new PuzzleAnalyzerDistances(mWeights[w++] > 50, mWeights[w++] > 50, (int)translate(mWeights[w++], 0, 4), (int)translate(mWeights[w++], 1, 4), mWeights[w++] > 50), mWeights[w++] / 10), makePower(mWeights[w++]));
-		PuzzleAnalyzerExp fourBlocks = new PuzzleAnalyzerExp(new PuzzleAnalyzerMultiplyer(new PuzzleAnalyzer4Blocks(mWeights[w++] / 20 + 1), mWeights[w++] / 10), makePower(mWeights[w++]));
-		PuzzleAnalyzerExp orphans = new PuzzleAnalyzerExp(new PuzzleAnalyzerMultiplyer(new PuzzleAnalyzerOrphans(mWeights[w++] / 20 + 1, mWeights[w++] > 50, mWeights[w++] > 50, mWeights[w++] > 50), mWeights[w++] / 10), makePower(mWeights[w++]));
-		IPuzzleAnalyzer total = new PuzzleAnalyzerExp(new PuzzleAnalyzerMultiplyer(new PuzzleAnalyzerRemainingBlocks(), mWeights[w++] / 10), makePower(mWeights[w++]));
+		PuzzleAnalyzerExp fourBlocks = new PuzzleAnalyzerExp(new PuzzleAnalyzerMultiplyer(new PuzzleAnalyzer4Blocks(mWeights[w++] / 20 + 1), makeMultiplyer(mWeights[w++])), makePower(mWeights[w++]));
+		PuzzleAnalyzerExp orphans = new PuzzleAnalyzerExp(new PuzzleAnalyzerMultiplyer(new PuzzleAnalyzerOrphans(mWeights[w++] / 20 + 1, mWeights[w++] > 50, mWeights[w++] > 50, mWeights[w++] > 50), makeMultiplyer(mWeights[w++])), makePower(mWeights[w++]));
+		IPuzzleAnalyzer total = new PuzzleAnalyzerExp(new PuzzleAnalyzerMultiplyer(new PuzzleAnalyzerRemainingBlocks(), makeMultiplyer(mWeights[w++])), makePower(mWeights[w++]));
 		IPuzzleAnalyzer[] analyzers = new IPuzzleAnalyzer[] {distances, fourBlocks, orphans, total};
 		double[] weights = new double[] {mWeights[w++] - 50, mWeights[w++] - 50, mWeights[w++] - 50, mWeights[w++] - 50};
 		IPuzzleAnalyzer puzzleAnalyzer = new PuzzleAnalyzerCombiner(analyzers, weights);
 		mStringRepresentation = puzzleAnalyzer.description();
 		return new Player(new CombinationSearcher(puzzleAnalyzer)).play(new PuzzleBuilderRandom().buildPuzzle(), new PuzzleRefill(scoreComputer), scoreComputer);
+	}
+
+	private double makeMultiplyer(double v)
+	{
+		return (v - 50) / 10;
 	}
 
 	private double translate(double val, double min, int max)
@@ -89,6 +94,6 @@ class OneTest implements Runnable
 
 	private double makePower(double val)
 	{
-		return translate(val, 0.5, 3);
+		return translate(val, 0.1, 3);
 	}
 }
