@@ -25,7 +25,6 @@ public class TestPlayersBruteForce
 		private int mMinusDistance;
 		private boolean mIncludeMinMax;
 		private boolean mUseMaxPenalty;
-		private boolean mUsePenalty4;
 
 		/**
 		 * Created on 30 mars 2010 by jtoumit.<br>
@@ -37,7 +36,7 @@ public class TestPlayersBruteForce
 		 * @param pUseMaxPenalty
 		 * @param pUsePenalty4
 		 */
-		public OneTest(boolean pDivideByNbElements, boolean pSquareDistance, int pBestFor4, int pMinusDistance, boolean pIncludeMinMax, boolean pUseMaxPenalty, boolean pUsePenalty4)
+		public OneTest(boolean pDivideByNbElements, boolean pSquareDistance, int pBestFor4, int pMinusDistance, boolean pIncludeMinMax, boolean pUseMaxPenalty)
 		{
 			super();
 			mDivideByNbElements = pDivideByNbElements;
@@ -46,7 +45,6 @@ public class TestPlayersBruteForce
 			mMinusDistance = pMinusDistance;
 			mIncludeMinMax = pIncludeMinMax;
 			mUseMaxPenalty = pUseMaxPenalty;
-			mUsePenalty4 = pUsePenalty4;
 		}
 
 		@Override
@@ -84,7 +82,7 @@ public class TestPlayersBruteForce
 		private int evaluate()
 		{
 			ScoreComputer scoreComputer = new ScoreComputer();
-			int evaluate = new Player(new CombinationSearcher(new PuzzleAnalyzerDistances(mDivideByNbElements, mSquareDistance, mBestFor4, mMinusDistance, mUseMaxPenalty, mUsePenalty4))).play(new PuzzleBuilderRandom().buildPuzzle(), new PuzzleRefill(scoreComputer), scoreComputer);
+			int evaluate = new Player(new CombinationSearcher(new PuzzleAnalyzerDistances(mDivideByNbElements, mSquareDistance, mBestFor4, mMinusDistance, mUseMaxPenalty))).play(new PuzzleBuilderRandom().buildPuzzle(), new PuzzleRefill(scoreComputer), scoreComputer);
 			return evaluate;
 		}
 	}
@@ -93,7 +91,7 @@ public class TestPlayersBruteForce
 	{
 		OneTest bestTest = null;
 		int current = 1;
-		int total = 2 * 2 * 2 * 2 * 2 * 12;
+		int total = 2 * 2 * 2 * 2 * 12;
 		ExecutorService poolExecutor = Executors.newFixedThreadPool(4);
 		List<Future<OneTest>> futures = new ArrayList<Future<OneTest>>();
 		for (int maxPenalty = 0; maxPenalty < 2; maxPenalty++)
@@ -106,15 +104,12 @@ public class TestPlayersBruteForce
 					{
 						for (int best = -1; best <= 100; )
 						{
-							for (int penalty4 = 0 ; penalty4 < 2 ; penalty4++)
-							{
-								OneTest task = new OneTest(divides == 1, squares == 1, best, minusDistance, false, maxPenalty == 1, penalty4 == 1);
-								futures.add(poolExecutor.submit(task, task));
-								if (best == -1)
-									best = 0;
-								else
-									best += 10;
-							}
+							OneTest task = new OneTest(divides == 1, squares == 1, best, minusDistance, false, maxPenalty == 1);
+							futures.add(poolExecutor.submit(task, task));
+							if (best == -1)
+								best = 0;
+							else
+								best += 10;
 						}
 					}
 				}
@@ -138,7 +133,7 @@ public class TestPlayersBruteForce
 
 	private static void printCurrentResult(OneTest pBestTest, int pCurrent, int pTotal, long pStart)
 	{
-		System.out.println(((System.currentTimeMillis() - pStart) / 1000) + "s, " + pCurrent + " / " + pTotal + ", currentBestHit: " + pBestTest.mResult + ", currentBestDivide = " + pBestTest.mDivideByNbElements + ", currentBestSquare: " + pBestTest.mSquareDistance + ", currentBestFor4: " + pBestTest.mBestFor4 + ", currentBestMinusDistance: " + pBestTest.mMinusDistance + ", currentUseMaxPenalty: " + pBestTest.mUseMaxPenalty + ", penalty4: " + pBestTest.mUsePenalty4);
+		System.out.println(((System.currentTimeMillis() - pStart) / 1000) + "s, " + pCurrent + " / " + pTotal + ", currentBestHit: " + pBestTest.mResult + ", currentBestDivide = " + pBestTest.mDivideByNbElements + ", currentBestSquare: " + pBestTest.mSquareDistance + ", currentBestFor4: " + pBestTest.mBestFor4 + ", currentBestMinusDistance: " + pBestTest.mMinusDistance + ", currentUseMaxPenalty: " + pBestTest.mUseMaxPenalty);
 	}
 
 }

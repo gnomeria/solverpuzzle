@@ -46,6 +46,6 @@ public class PuzzleAnalyzer4Blocks implements IPuzzleAnalyzer
 	@Override
 	public String description()
 	{
-		return "4Blocks(" + mFitness + ")";
+		return "4Blocks(" + PuzzleAnalyzerHelper.readableDouble(mFitness) + ")";
 	}
 }

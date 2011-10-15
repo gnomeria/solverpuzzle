@@ -6,6 +6,7 @@ package jyt.game.kadokado.binary.help.impl.analyzers;
 
 import jyt.game.kadokado.binary.help.Element;
 import jyt.game.kadokado.binary.help.IPuzzleAnalyzer;
+import jyt.game.kadokado.binary.help.PuzzleAnalyzerHelper;
 import jyt.game.puzzle.solving.Puzzle;
 
 public class PuzzleAnalyzerCombiner implements IPuzzleAnalyzer
@@ -42,7 +43,7 @@ public class PuzzleAnalyzerCombiner implements IPuzzleAnalyzer
 		{
 			if (i > 0)
 				b.append(", ");
-			b.append(mAnalyzers[i].description()).append(": ").append(mWeights[i]);
+			b.append(mAnalyzers[i].description()).append(": ").append(PuzzleAnalyzerHelper.readableDouble(mWeights[i]));
 		}
 		return b.toString();
 	}

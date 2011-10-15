@@ -4,8 +4,6 @@
  */
 package jyt.game.kadokado.binary.help.impl.analyzers;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,11 +19,10 @@ public class PuzzleAnalyzerDistances implements IPuzzleAnalyzer
 	private int mBestFor4;
 	private int mMinusDistance;
 	private boolean mUseMaxDistancePenalty;
-	private boolean mUsePenalty4;
 
 	public PuzzleAnalyzerDistances()
 	{
-		this(true, false, 70, 0, true, true);
+		this(true, false, 70, 0, true);
 	}
 
 	/**
@@ -36,7 +33,7 @@ public class PuzzleAnalyzerDistances implements IPuzzleAnalyzer
 	 * @param pMinusDistance
 	 * @param pUseMaxDistancePenalty
 	 */
-	public PuzzleAnalyzerDistances(boolean pDivideByNbElements, boolean pSquareDistance, int pBestFor4, int pMinusDistance, boolean pUseMaxDistancePenalty, boolean pUsePenalty4)
+	public PuzzleAnalyzerDistances(boolean pDivideByNbElements, boolean pSquareDistance, int pBestFor4, int pMinusDistance, boolean pUseMaxDistancePenalty)
 	{
 		super();
 		mDivideByNbElements = pDivideByNbElements;
@@ -132,6 +129,24 @@ public class PuzzleAnalyzerDistances implements IPuzzleAnalyzer
 	@Override
 	public String description()
 	{
-		return "MultiDist";
+		String string = "MultiDist(";
+		String separator = "";
+		if (mDivideByNbElements)
+		{
+			string += separator + "div";
+			separator = ",";
+		}
+		if (mSquareDistance)
+		{
+			string += separator + "sqrDist";
+			separator = ",";
+		}
+		if (mUseMaxDistancePenalty)
+		{
+			string += separator + "maxDistPen";
+			separator = ",";
+		}
+		string += separator + "best4=" + mBestFor4 + ",minDist=" + mMinusDistance;
+		return string;
 	}
 }

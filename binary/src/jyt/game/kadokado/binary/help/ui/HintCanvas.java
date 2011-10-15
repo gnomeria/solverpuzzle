@@ -71,8 +71,8 @@ public class HintCanvas extends Canvas
 		IPuzzleAnalyzer analyzer = new PuzzleAnalyzerCombiner(new IPuzzleAnalyzer[]
 				{
 					new PuzzleAnalyzerDistances(),
-					new PuzzleAnalyzerExp(new PuzzleAnalyzer4Blocks(50), 3.28),
-					new PuzzleAnalyzerExp(new PuzzleAnalyzerOrphans(50), 1.44)
+					new PuzzleAnalyzerExp(new PuzzleAnalyzer4Blocks(2), 3.28),
+					new PuzzleAnalyzerExp(new PuzzleAnalyzerOrphans(3, true, true, true), 1.44)
 				},
 				new double[] {2.6, 77, 95});
 		mCombinations = new CombinationSearcher(analyzer).search(mPuzzle);
