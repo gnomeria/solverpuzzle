@@ -58,8 +58,8 @@ class OneTest implements Runnable
 		}
 		mMin = min;
 		mMax = max;
-//		return total / mNbRun + min;
-		return min;
+		return total / mNbRun;
+//		return min;
 	}
 
 	public double[] getWeights()
