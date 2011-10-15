@@ -2,6 +2,7 @@ package jyt.game.kadokado.binary.help.impl.analyzers;
 
 import jyt.game.kadokado.binary.help.Element;
 import jyt.game.kadokado.binary.help.IPuzzleAnalyzer;
+import jyt.game.kadokado.binary.help.PuzzleAnalyzerHelper;
 import jyt.game.puzzle.solving.Puzzle;
 
 public class PuzzleAnalyzerExp implements IPuzzleAnalyzer
@@ -13,7 +14,7 @@ public class PuzzleAnalyzerExp implements IPuzzleAnalyzer
 	{
 		super();
 		mWrappedAnalyzer = pWrappedAnalyzer;
-		mIntensity = pIntensity / 30 + 1;
+		mIntensity = pIntensity;
 	}
 
 	@Override
@@ -25,7 +26,7 @@ public class PuzzleAnalyzerExp implements IPuzzleAnalyzer
 	@Override
 	public String description()
 	{
-		return mWrappedAnalyzer.description() + "^" + mIntensity;
+		return mWrappedAnalyzer.description() + "^" + PuzzleAnalyzerHelper.readableDouble(mIntensity);
 	}
 
 }

@@ -7,7 +7,9 @@ import jyt.game.kadokado.binary.help.impl.analyzers.PuzzleAnalyzer4Blocks;
 import jyt.game.kadokado.binary.help.impl.analyzers.PuzzleAnalyzerCombiner;
 import jyt.game.kadokado.binary.help.impl.analyzers.PuzzleAnalyzerDistances;
 import jyt.game.kadokado.binary.help.impl.analyzers.PuzzleAnalyzerExp;
+import jyt.game.kadokado.binary.help.impl.analyzers.PuzzleAnalyzerMultiplyer;
 import jyt.game.kadokado.binary.help.impl.analyzers.PuzzleAnalyzerOrphans;
+import jyt.game.kadokado.binary.help.impl.analyzers.PuzzleAnalyzerRemainingBlocks;
 
 class OneTest implements Runnable
 {
@@ -68,10 +70,25 @@ class OneTest implements Runnable
 	private int evaluate()
 	{
 		ScoreComputer scoreComputer = new ScoreComputer();
-		IPuzzleAnalyzer[] analyzers = new IPuzzleAnalyzer[] {new PuzzleAnalyzerExp(new PuzzleAnalyzerDistances(), mWeights[1]), new PuzzleAnalyzerExp(new PuzzleAnalyzer4Blocks(mWeights[6]), mWeights[3]), new PuzzleAnalyzerExp(new PuzzleAnalyzerOrphans(mWeights[7]), mWeights[5])};
-		double[] weights = new double[] {mWeights[0], mWeights[2], mWeights[4]};
+		int w = 0;
+		PuzzleAnalyzerExp distances = new PuzzleAnalyzerExp(new PuzzleAnalyzerMultiplyer(new PuzzleAnalyzerDistances(mWeights[w++] > 50, mWeights[w++] > 50, (int)translate(mWeights[w++], 0, 4), (int)translate(mWeights[w++], 1, 4), mWeights[w++] > 50), mWeights[w++] / 10), makePower(mWeights[w++]));
+		PuzzleAnalyzerExp fourBlocks = new PuzzleAnalyzerExp(new PuzzleAnalyzerMultiplyer(new PuzzleAnalyzer4Blocks(mWeights[w++] / 20 + 1), mWeights[w++] / 10), makePower(mWeights[w++]));
+		PuzzleAnalyzerExp orphans = new PuzzleAnalyzerExp(new PuzzleAnalyzerMultiplyer(new PuzzleAnalyzerOrphans(mWeights[w++] / 20 + 1, mWeights[w++] > 50, mWeights[w++] > 50, mWeights[w++] > 50), mWeights[w++] / 10), makePower(mWeights[w++]));
+		IPuzzleAnalyzer total = new PuzzleAnalyzerExp(new PuzzleAnalyzerMultiplyer(new PuzzleAnalyzerRemainingBlocks(), mWeights[w++] / 10), makePower(mWeights[w++]));
+		IPuzzleAnalyzer[] analyzers = new IPuzzleAnalyzer[] {distances, fourBlocks, orphans, total};
+		double[] weights = new double[] {mWeights[w++] - 50, mWeights[w++] - 50, mWeights[w++] - 50, mWeights[w++] - 50};
 		IPuzzleAnalyzer puzzleAnalyzer = new PuzzleAnalyzerCombiner(analyzers, weights);
 		mStringRepresentation = puzzleAnalyzer.description();
 		return new Player(new CombinationSearcher(puzzleAnalyzer)).play(new PuzzleBuilderRandom().buildPuzzle(), new PuzzleRefill(scoreComputer), scoreComputer);
+	}
+
+	private double translate(double val, double min, int max)
+	{
+		return val * (max - min) / 100 + min;
+	}
+
+	private double makePower(double val)
+	{
+		return translate(val, 0.5, 3);
 	}
 }

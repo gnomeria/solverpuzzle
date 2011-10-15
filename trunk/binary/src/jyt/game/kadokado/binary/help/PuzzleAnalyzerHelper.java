@@ -116,4 +116,11 @@ public class PuzzleAnalyzerHelper
 		}
 		return aggregates;
 	}
+
+	public static String readableDouble(double pFactor)
+	{
+		int integerPart = (int)Math.floor(pFactor);
+		int decimals = (int)(Math.round(pFactor - integerPart) * 100);
+		return "" + integerPart + "." + decimals;
+	}
 }

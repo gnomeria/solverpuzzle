@@ -74,7 +74,9 @@ public class TestPlayersGenetic extends JFrame
 		ExecutorService poolExecutor = Executors.newFixedThreadPool(4);
 		for (int i = 0; i < 20; i++)
 		{
-			double[] weights = new double[] {mRandom.nextDouble() * 100, mRandom.nextDouble() * 100, mRandom.nextDouble() * 100, mRandom.nextDouble() * 100, mRandom.nextDouble() * 100, mRandom.nextDouble() * 100, mRandom.nextDouble() * 100, mRandom.nextDouble() * 100};
+			double[] weights = new double[22];
+			for (int j = 0; j < weights.length; j++)
+				weights[j] = mRandom.nextDouble() * 100;
 			individuals.add(new OneTest(weights, nbRun));
 		}
 		long start = System.currentTimeMillis();

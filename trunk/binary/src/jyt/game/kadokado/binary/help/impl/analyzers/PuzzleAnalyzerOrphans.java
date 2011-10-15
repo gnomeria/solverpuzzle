@@ -24,11 +24,17 @@ import jyt.game.puzzle.solving.impl.Point;
 public class PuzzleAnalyzerOrphans implements IPuzzleAnalyzer
 {
 	private double mDistance;
+	private boolean mDivideByAggSize;
+	private boolean mDivideByAggsSize;
+	private boolean mDivideByTotalPoints;
 
-	public PuzzleAnalyzerOrphans(double pDistance)
+	public PuzzleAnalyzerOrphans(double pDistance, boolean pDivideByAggSize, boolean pDivideByAggsSize, boolean pDivideByTotalPoints)
 	{
 		super();
-		mDistance = pDistance / 30 + 1;
+		mDistance = pDistance;
+		mDivideByAggSize = pDivideByAggSize;
+		mDivideByAggsSize = pDivideByAggsSize;
+		mDivideByTotalPoints = pDivideByTotalPoints;
 	}
 
 	@Override
@@ -45,10 +51,15 @@ public class PuzzleAnalyzerOrphans implements IPuzzleAnalyzer
 			for (List<Point> aggregate : aggregates)
 			{
 				PointDouble center = PuzzleAnalyzerHelper.getGravityCenter(aggregate);
-				weight += center.getY() / aggregate.size() / aggregates.size();
+				double deepness = center.getY();
+				if (mDivideByAggSize)
+					deepness /=  aggregate.size();
+				if (mDivideByAggsSize)
+					deepness /= aggregates.size();
+				weight += deepness;
 			}
 		}
-		if (pPuzzle.getTotalPoints() > 0)
+		if (mDivideByTotalPoints && (pPuzzle.getTotalPoints() > 0))
 			weight /= pPuzzle.getTotalPoints();
 		return weight;
 	}
@@ -56,6 +67,6 @@ public class PuzzleAnalyzerOrphans implements IPuzzleAnalyzer
 	@Override
 	public String description()
 	{
-		return "Orphans(" + mDistance + ")";
+		return "Orphans(" + PuzzleAnalyzerHelper.readableDouble(mDistance) + ", " + (mDivideByAggsSize ? "true" : "false") + ", " + (mDivideByAggSize ? "true" : "false") + ", " + (mDivideByTotalPoints ? "true" : "false") + ")";
 	}
 }
