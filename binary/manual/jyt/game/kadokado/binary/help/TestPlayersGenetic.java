@@ -26,8 +26,9 @@ public class TestPlayersGenetic extends JFrame
 {
 	private static final Random mRandom = new Random(System.currentTimeMillis());
 	private Double[][] allResults;
+	private int mCurrentRun;
 
-	public TestPlayersGenetic()
+	public TestPlayersGenetic() throws InterruptedException, ExecutionException
 	{
 		super("Genetic testing for test players");
 		setBounds(0, 0, 600, 350);
@@ -40,45 +41,17 @@ public class TestPlayersGenetic extends JFrame
 			}
 		});
 
-	}
-
-	@Override
-	public void paint(Graphics g)
-	{
-		super.paint(g);
-		for (int i = 0; i < allResults.length; i++)
-		{
-			for (int j = 0; j < allResults[i].length; j++)
-			{
-				if (allResults[i][j] != null)
-				{
-					int c = 200 - i * 2;
-					g.setColor(new Color(c, c, c));
-					g.drawRect(j * 2, (int)(allResults[i][j].doubleValue() * 350 / 100000), 1, 1);
-				}
-			}
-		}
-	}
-
-	public static void main(String[] args) throws InterruptedException, ExecutionException
-	{
-		TestPlayersGenetic frame = new TestPlayersGenetic();
-		frame.allResults = new Double[100][];
-		for (int i = 0; i < frame.allResults.length; i++)
-			frame.allResults[i] = new Double[100];
-		frame.setVisible(true);
-
 		OneTest bestTest = null;
 		int nbRun = 100;
 		List<OneTest> individuals = new ArrayList<OneTest>();
-		ExecutorService poolExecutor = Executors.newFixedThreadPool(4);
-		for (int i = 0; i < 100; i++)
+		ExecutorService poolExecutor = Executors.newFixedThreadPool(3);
+		for (int i = 0; i < 50; i++)
 			individuals.add(new OneTest(createRandomWeights(), nbRun));
 		long start = System.currentTimeMillis();
-		for (int iRun = 0; iRun < 100; iRun++)
+		for (mCurrentRun = 0; mCurrentRun < 100; mCurrentRun++)
 		{
 			List<Future<OneTest>> futures = new ArrayList<Future<OneTest>>();
-			System.out.println("Run " + iRun);
+			System.out.println("Run " + mCurrentRun);
 			for (OneTest oneTest : individuals)
 				futures.add(poolExecutor.submit(oneTest, oneTest));
 			int currentIndividual = 0;
@@ -87,12 +60,12 @@ public class TestPlayersGenetic extends JFrame
 				OneTest test = future.get();
 				if ((bestTest == null) || (test.getResult() > bestTest.getResult()))
 					bestTest = test;
-				frame.allResults[iRun][currentIndividual++] = new Double(test.getResult());
-				frame.repaint();
+				allResults[mCurrentRun][currentIndividual++] = new Double(test.getResult());
+				repaint();
 				System.out.print("*");
 			}
 			System.out.println();
-			printCurrentResult(bestTest, iRun, 100, start);
+			printCurrentResult(bestTest, mCurrentRun, 100, start);
 
 			// Now seed the next generation
 			// Sort in decreasing order and kill the worst while keeping the best
@@ -130,7 +103,34 @@ public class TestPlayersGenetic extends JFrame
 		System.out.println("Done");
 	}
 
-	private static double[] createRandomWeights()
+	@Override
+	public void paint(Graphics g)
+	{
+		super.paint(g);
+		for (int i = 0; i < Math.min(mCurrentRun + 1, allResults.length); i++)
+		{
+			for (int j = 0; j < allResults[i].length; j++)
+			{
+				if (allResults[i][j] != null)
+				{
+					int c = 200 - (200 * i / (mCurrentRun + 1));
+					g.setColor(new Color(c, c, c));
+					g.drawRect(j * 2, (int)(allResults[i][j].doubleValue() * 350 / 100000), 1, 1);
+				}
+			}
+		}
+	}
+
+	public static void main(String[] args) throws InterruptedException, ExecutionException
+	{
+		TestPlayersGenetic frame = new TestPlayersGenetic();
+		frame.allResults = new Double[100][];
+		for (int i = 0; i < frame.allResults.length; i++)
+			frame.allResults[i] = new Double[100];
+		frame.setVisible(true);
+	}
+
+	private double[] createRandomWeights()
 	{
 		double[] weights = new double[22];
 		for (int j = 0; j < weights.length; j++)
@@ -138,7 +138,7 @@ public class TestPlayersGenetic extends JFrame
 		return weights;
 	}
 
-	private static double[] shakeShake(double[] pDouble, List<OneTest> pIndividuals, int pPercentKeep, int pPercentCopy, int pPercentRandom)
+	private double[] shakeShake(double[] pDouble, List<OneTest> pIndividuals, int pPercentKeep, int pPercentCopy, int pPercentRandom)
 	{
 		double[] res = new double[pDouble.length];
 		for (int i = 0; i < res.length; i++)
@@ -159,7 +159,7 @@ public class TestPlayersGenetic extends JFrame
 		return res;
 	}
 
-	private static void printCurrentResult(OneTest pBestTest, int pCurrent, int pTotal, long pStart)
+	private void printCurrentResult(OneTest pBestTest, int pCurrent, int pTotal, long pStart)
 	{
 		System.out.println(((System.currentTimeMillis() - pStart) / 1000) + "s, " + pCurrent + " / " + pTotal + ", currentBestHit: " + pBestTest.mResult + " (" + pBestTest.mMin + "-" + pBestTest.mMax + "), " + pBestTest.mStringRepresentation);
 	}
