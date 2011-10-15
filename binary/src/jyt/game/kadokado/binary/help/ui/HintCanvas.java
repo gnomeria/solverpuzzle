@@ -14,7 +14,12 @@ import jyt.game.kadokado.binary.help.Collapser;
 import jyt.game.kadokado.binary.help.Combination;
 import jyt.game.kadokado.binary.help.CombinationSearcher;
 import jyt.game.kadokado.binary.help.Element;
+import jyt.game.kadokado.binary.help.IPuzzleAnalyzer;
+import jyt.game.kadokado.binary.help.impl.analyzers.PuzzleAnalyzer4Blocks;
+import jyt.game.kadokado.binary.help.impl.analyzers.PuzzleAnalyzerCombiner;
 import jyt.game.kadokado.binary.help.impl.analyzers.PuzzleAnalyzerDistances;
+import jyt.game.kadokado.binary.help.impl.analyzers.PuzzleAnalyzerExp;
+import jyt.game.kadokado.binary.help.impl.analyzers.PuzzleAnalyzerOrphans;
 import jyt.game.puzzle.solving.ActionManager;
 import jyt.game.puzzle.solving.Puzzle;
 import jyt.game.puzzle.solving.impl.actions.RotationClockWise;
@@ -62,7 +67,15 @@ public class HintCanvas extends Canvas
 	public void setPuzzle(Puzzle<Element> pPuzzle)
 	{
 		mPuzzle = new Puzzle<Element>(pPuzzle);
-		mCombinations = new CombinationSearcher(new PuzzleAnalyzerDistances()).search(mPuzzle);
+//		mCombinations = new CombinationSearcher(new PuzzleAnalyzerDistances()).search(mPuzzle);
+		IPuzzleAnalyzer analyzer = new PuzzleAnalyzerCombiner(new IPuzzleAnalyzer[]
+				{
+					new PuzzleAnalyzerDistances(),
+					new PuzzleAnalyzerExp(new PuzzleAnalyzer4Blocks(50), 3.28),
+					new PuzzleAnalyzerExp(new PuzzleAnalyzerOrphans(50), 1.44)
+				},
+				new double[] {2.6, 77, 95});
+		mCombinations = new CombinationSearcher(analyzer).search(mPuzzle);
 	}
 
 	public void setCurrentCombination(int pCurrentCombination)

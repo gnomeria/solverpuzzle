@@ -82,7 +82,7 @@ public class PuzzleAnalyzerHelper
 		return new PointDouble(x / pPoints.size(), y / pPoints.size());
 	}
 
-	public static List<List<Point>> createAggregates(List<Point> pPoints, int pMaxDist)
+	public static List<List<Point>> createAggregates(List<Point> pPoints, double pMaxDist)
 	{
 		List<List<Point>> aggregates = new ArrayList<List<Point>>();
 		// Gravity centers for each aggregate

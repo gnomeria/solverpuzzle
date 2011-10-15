@@ -56,7 +56,8 @@ class OneTest implements Runnable
 		}
 		mMin = min;
 		mMax = max;
-		return total / mNbRun + min;
+//		return total / mNbRun + min;
+		return min;
 	}
 
 	public double[] getWeights()
@@ -67,9 +68,9 @@ class OneTest implements Runnable
 	private int evaluate()
 	{
 		ScoreComputer scoreComputer = new ScoreComputer();
-		IPuzzleAnalyzer[] analyzers = new IPuzzleAnalyzer[] {new PuzzleAnalyzerExp(new PuzzleAnalyzerDistances(), mWeights[1]), new PuzzleAnalyzerExp(new PuzzleAnalyzer4Blocks(), mWeights[1]), new PuzzleAnalyzerExp(new PuzzleAnalyzerOrphans(), mWeights[1])};
+		IPuzzleAnalyzer[] analyzers = new IPuzzleAnalyzer[] {new PuzzleAnalyzerExp(new PuzzleAnalyzerDistances(), mWeights[1]), new PuzzleAnalyzerExp(new PuzzleAnalyzer4Blocks(mWeights[6]), mWeights[3]), new PuzzleAnalyzerExp(new PuzzleAnalyzerOrphans(mWeights[7]), mWeights[5])};
 		double[] weights = new double[] {mWeights[0], mWeights[2], mWeights[4]};
-		IPuzzleAnalyzer puzzleAnalyzer = new PuzzleAnalyzerCombiner(analyzers, mWeights);
+		IPuzzleAnalyzer puzzleAnalyzer = new PuzzleAnalyzerCombiner(analyzers, weights);
 		mStringRepresentation = puzzleAnalyzer.description();
 		return new Player(new CombinationSearcher(puzzleAnalyzer)).play(new PuzzleBuilderRandom().buildPuzzle(), new PuzzleRefill(scoreComputer), scoreComputer);
 	}
