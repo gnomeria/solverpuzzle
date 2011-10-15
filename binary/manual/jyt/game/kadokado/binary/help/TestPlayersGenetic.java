@@ -28,7 +28,7 @@ public class TestPlayersGenetic extends JFrame
 	private Double[][] allResults;
 	private int mCurrentRun;
 
-	public TestPlayersGenetic() throws InterruptedException, ExecutionException
+	public TestPlayersGenetic()
 	{
 		super("Genetic testing for test players");
 		setBounds(0, 0, 600, 350);
@@ -40,7 +40,10 @@ public class TestPlayersGenetic extends JFrame
 				System.exit(0);
 			}
 		});
+	}
 
+	private void run() throws InterruptedException, ExecutionException
+	{
 		OneTest bestTest = null;
 		int nbRun = 100;
 		List<OneTest> individuals = new ArrayList<OneTest>();
@@ -128,6 +131,7 @@ public class TestPlayersGenetic extends JFrame
 		for (int i = 0; i < frame.allResults.length; i++)
 			frame.allResults[i] = new Double[100];
 		frame.setVisible(true);
+		frame.run();
 	}
 
 	private double[] createRandomWeights()
