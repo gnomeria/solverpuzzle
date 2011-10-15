@@ -69,10 +69,10 @@ public class TestPlayersGenetic extends JFrame
 		frame.setVisible(true);
 		
 		OneTest bestTest = null;
-		int nbRun = 30;
+		int nbRun = 100;
 		List<OneTest> individuals = new ArrayList<OneTest>();
 		ExecutorService poolExecutor = Executors.newFixedThreadPool(4);
-		for (int i = 0; i < 20; i++)
+		for (int i = 0; i < 100; i++)
 		{
 			double[] weights = new double[22];
 			for (int j = 0; j < weights.length; j++)
@@ -110,17 +110,28 @@ public class TestPlayersGenetic extends JFrame
 			});
 			for (int iInd = 0; iInd < individuals.size(); iInd++)
 			{
-				if (iInd < individuals.size() / 10)
-				// keep the 10% best
+				if (iInd > individuals.size() * 0.9)
+				// kill the 10% worst and feed them with random stuff
+				{
+					double[] weights;
+					individuals.set(iInd, new OneTest(weights, nbRun));
+				}
+				else if (iInd > individuals.size() * 0.6)
+				// kill the 40% worst and feed them with the 10% best
+					individuals.set(iInd, new OneTest(shakeShake(individuals.get(mRandom.nextInt(10) * individuals.size() / 100).getWeights(), individuals, 50, 20, 20), nbRun));
+				else if (iInd < individuals.size() / 50)
+				// keep the 2% best
 				{
 					
 				}
-				else if (iInd > individuals.size() * 0.8)
-				// kill the 20% worst
-					individuals.set(iInd, new OneTest(shakeShake(individuals.get(mRandom.nextInt(20) * individuals.size() / 100).getWeights(), individuals, 70, 10, 10), nbRun));
+				else if (iInd < individuals.size() / 10)
+				// shake the others a little until 10%
+				{
+					individuals.set(iInd, new OneTest(shakeShake(individuals.get(iInd).getWeights(), individuals, 80, 5, 5), nbRun));
+				}
 				else
 				// Shake the middle a little
-					individuals.set(iInd, new OneTest(shakeShake(individuals.get(iInd).getWeights(), individuals, 80, 5, 5), nbRun));
+					individuals.set(iInd, new OneTest(shakeShake(individuals.get(iInd).getWeights(), individuals, 70, 10, 10), nbRun));
 			}
 		}
 		poolExecutor.shutdown();
