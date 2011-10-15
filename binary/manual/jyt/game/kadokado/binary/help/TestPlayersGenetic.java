@@ -67,18 +67,13 @@ public class TestPlayersGenetic extends JFrame
 		for (int i = 0; i < frame.allResults.length; i++)
 			frame.allResults[i] = new Double[100];
 		frame.setVisible(true);
-		
+
 		OneTest bestTest = null;
 		int nbRun = 100;
 		List<OneTest> individuals = new ArrayList<OneTest>();
 		ExecutorService poolExecutor = Executors.newFixedThreadPool(4);
 		for (int i = 0; i < 100; i++)
-		{
-			double[] weights = new double[22];
-			for (int j = 0; j < weights.length; j++)
-				weights[j] = mRandom.nextDouble() * 100;
-			individuals.add(new OneTest(weights, nbRun));
-		}
+			individuals.add(new OneTest(createRandomWeights(), nbRun));
 		long start = System.currentTimeMillis();
 		for (int iRun = 0; iRun < 100; iRun++)
 		{
@@ -112,10 +107,7 @@ public class TestPlayersGenetic extends JFrame
 			{
 				if (iInd > individuals.size() * 0.9)
 				// kill the 10% worst and feed them with random stuff
-				{
-					double[] weights;
-					individuals.set(iInd, new OneTest(weights, nbRun));
-				}
+					individuals.set(iInd, new OneTest(createRandomWeights(), nbRun));
 				else if (iInd > individuals.size() * 0.6)
 				// kill the 40% worst and feed them with the 10% best
 					individuals.set(iInd, new OneTest(shakeShake(individuals.get(mRandom.nextInt(10) * individuals.size() / 100).getWeights(), individuals, 50, 20, 20), nbRun));
@@ -136,6 +128,14 @@ public class TestPlayersGenetic extends JFrame
 		}
 		poolExecutor.shutdown();
 		System.out.println("Done");
+	}
+
+	private static double[] createRandomWeights()
+	{
+		double[] weights = new double[22];
+		for (int j = 0; j < weights.length; j++)
+			weights[j] = mRandom.nextDouble() * 100;
+		return weights;
 	}
 
 	private static double[] shakeShake(double[] pDouble, List<OneTest> pIndividuals, int pPercentKeep, int pPercentCopy, int pPercentRandom)
