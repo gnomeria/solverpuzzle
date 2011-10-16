@@ -4,7 +4,9 @@
  */
 package jyt.game.puzzle.solving;
 
-public interface ICollapser<T>
+import java.io.Serializable;
+
+public interface ICollapser<T> extends Serializable
 {
 	void collapse(Puzzle<T> pPuzzle, ActionManager<T> pActionManager, ICollapseListener<T> pCollapseListener);
 }

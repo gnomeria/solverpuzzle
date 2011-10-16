@@ -4,9 +4,11 @@
  */
 package jyt.game.kadokado.binary.help;
 
+import java.io.Serializable;
+
 import jyt.game.puzzle.solving.impl.Point;
 
-public class PointDouble
+public class PointDouble implements Serializable
 {
 	private double x;
 	private double y;

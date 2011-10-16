@@ -5,8 +5,9 @@
 package jyt.game.kadokado.binary.help;
 
 import java.awt.Color;
+import java.io.Serializable;
 
-public class Element
+public class Element implements Serializable
 {
 	private Color mColor;
 	private int mPoints;

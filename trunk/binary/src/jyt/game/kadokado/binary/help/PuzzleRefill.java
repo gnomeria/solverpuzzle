@@ -4,11 +4,12 @@
  */
 package jyt.game.kadokado.binary.help;
 
+import java.io.Serializable;
 import java.util.Random;
 
 import jyt.game.puzzle.solving.Puzzle;
 
-public class PuzzleRefill
+public class PuzzleRefill implements Serializable
 {
 	private ScoreComputer mScoreComputer;
 	private Random mRandom = new Random(System.currentTimeMillis());

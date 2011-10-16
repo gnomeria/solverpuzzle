@@ -4,11 +4,13 @@
  */
 package jyt.game.kadokado.binary.help;
 
+import java.io.Serializable;
+
 import jyt.game.puzzle.solving.ActionManager;
 import jyt.game.puzzle.solving.Puzzle;
 import jyt.game.puzzle.solving.impl.actions.RotationClockWise;
 
-public class Player
+public class Player implements Serializable
 {
 	private CombinationSearcher mCombinationSearcher;
 

@@ -4,7 +4,9 @@
  */
 package jyt.game.puzzle.solving;
 
-public interface IActionListener<T>
+import java.io.Serializable;
+
+public interface IActionListener<T> extends Serializable
 {
 	void actionWillExecute(IAction<T> pAction);
 	void actionExecuted(IAction<T> pAction);

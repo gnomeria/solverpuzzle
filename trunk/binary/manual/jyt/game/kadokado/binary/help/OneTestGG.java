@@ -13,7 +13,9 @@ import jyt.game.kadokado.binary.help.impl.analyzers.PuzzleAnalyzerMultiplyer;
 import jyt.game.kadokado.binary.help.impl.analyzers.PuzzleAnalyzerOrphans;
 import jyt.game.kadokado.binary.help.impl.analyzers.PuzzleAnalyzerRemainingBlocks;
 
-class OneTest implements Runnable, Serializable
+import org.gridgain.grid.gridify.Gridify;
+
+class OneTestGG implements Runnable, Serializable
 {
 	private int mResult;
 	private double[] mWeights;
@@ -26,14 +28,14 @@ class OneTest implements Runnable, Serializable
 	 * Created on 13 oct. 2011 by jtoumit.<br>
 	 * @param pWeights
 	 */
-	public OneTest(double[] pWeights, int pNbRun)
+	public OneTestGG(double[] pWeights, int pNbRun)
 	{
 		super();
 		mWeights = pWeights;
 		mNbRun = pNbRun;
 	}
 
-	@Override
+	@Gridify
 	public void run()
 	{
 		mResult = fullEvaluate();
@@ -73,9 +75,9 @@ class OneTest implements Runnable, Serializable
 	{
 		ScoreComputer scoreComputer = new ScoreComputer();
 		int w = 0;
-		IPuzzleAnalyzer distances = new PuzzleAnalyzerExp(new PuzzleAnalyzerMultiplyer(new PuzzleAnalyzerDistances(mWeights[w++] > 50, mWeights[w++] > 50, (int)translate(mWeights[w++], 0, 4), (int)translate(mWeights[w++], 1, 4), mWeights[w++] > 50), mWeights[w++] / 10), makePower(mWeights[w++]));
-		IPuzzleAnalyzer fourBlocks = new PuzzleAnalyzerExp(new PuzzleAnalyzerMultiplyer(new PuzzleAnalyzer4Blocks(mWeights[w++] / 20 + 1), makeMultiplyer(mWeights[w++])), makePower(mWeights[w++]));
-		IPuzzleAnalyzer orphans = new PuzzleAnalyzerExp(new PuzzleAnalyzerMultiplyer(new PuzzleAnalyzerOrphans(mWeights[w++] / 20 + 1, mWeights[w++] > 50, mWeights[w++] > 50, mWeights[w++] > 50), makeMultiplyer(mWeights[w++])), makePower(mWeights[w++]));
+		PuzzleAnalyzerExp distances = new PuzzleAnalyzerExp(new PuzzleAnalyzerMultiplyer(new PuzzleAnalyzerDistances(mWeights[w++] > 50, mWeights[w++] > 50, (int)translate(mWeights[w++], 0, 4), (int)translate(mWeights[w++], 1, 4), mWeights[w++] > 50), mWeights[w++] / 10), makePower(mWeights[w++]));
+		PuzzleAnalyzerExp fourBlocks = new PuzzleAnalyzerExp(new PuzzleAnalyzerMultiplyer(new PuzzleAnalyzer4Blocks(mWeights[w++] / 20 + 1), makeMultiplyer(mWeights[w++])), makePower(mWeights[w++]));
+		PuzzleAnalyzerExp orphans = new PuzzleAnalyzerExp(new PuzzleAnalyzerMultiplyer(new PuzzleAnalyzerOrphans(mWeights[w++] / 20 + 1, mWeights[w++] > 50, mWeights[w++] > 50, mWeights[w++] > 50), makeMultiplyer(mWeights[w++])), makePower(mWeights[w++]));
 		IPuzzleAnalyzer total = new PuzzleAnalyzerExp(new PuzzleAnalyzerMultiplyer(new PuzzleAnalyzerRemainingBlocks(), makeMultiplyer(mWeights[w++])), makePower(mWeights[w++]));
 		IPuzzleAnalyzer[] analyzers = new IPuzzleAnalyzer[] {distances, fourBlocks, orphans, total};
 		double[] weights = new double[] {mWeights[w++] - 50, mWeights[w++] - 50, mWeights[w++] - 50, mWeights[w++] - 50};
