@@ -4,9 +4,11 @@
  */
 package jyt.game.kadokado.binary.help;
 
+import java.io.Serializable;
+
 import jyt.game.puzzle.solving.impl.actions.RotationClockWise;
 
-public class Combination
+public class Combination implements Serializable
 {
 	private RotationClockWise<Element>[] mRotations;
 	private double mFitness;

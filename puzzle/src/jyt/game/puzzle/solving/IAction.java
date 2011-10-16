@@ -4,7 +4,9 @@
  */
 package jyt.game.puzzle.solving;
 
-public interface IAction<T>
+import java.io.Serializable;
+
+public interface IAction<T> extends Serializable
 {
 	void doAction(Puzzle<T> pPuzzle);
 

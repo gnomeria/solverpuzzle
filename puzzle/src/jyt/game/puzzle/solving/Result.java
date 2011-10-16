@@ -4,10 +4,11 @@
  */
 package jyt.game.puzzle.solving;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Result<T>
+public class Result<T> implements Serializable
 {
 	private List<Integer> mBlockSize;
 	private List<T> mElement;

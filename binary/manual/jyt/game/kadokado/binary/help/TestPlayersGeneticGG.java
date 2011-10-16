@@ -20,15 +20,19 @@ import java.util.concurrent.Future;
 
 import javax.swing.JFrame;
 
+import org.gridgain.grid.Grid;
+import org.gridgain.grid.GridException;
+import org.gridgain.grid.typedef.G;
 
 
-public class TestPlayersGenetic extends JFrame
+
+public class TestPlayersGeneticGG extends JFrame
 {
 	private static final Random mRandom = new Random(System.currentTimeMillis());
 	private Double[][] mAllResults;
 	private int mCurrentRun;
 
-	public TestPlayersGenetic()
+	public TestPlayersGeneticGG()
 	{
 		super("Genetic testing for test players");
 		setBounds(0, 0, 600, 350);
@@ -42,25 +46,28 @@ public class TestPlayersGenetic extends JFrame
 		});
 	}
 
-	private void run() throws InterruptedException, ExecutionException
+	private void run() throws InterruptedException, ExecutionException, GridException
 	{
-		OneTest bestTest = null;
+		OneTestGG bestTest = null;
 		int nbRun = 20;
-		List<OneTest> individuals = new ArrayList<OneTest>();
-		ExecutorService poolExecutor = Executors.newFixedThreadPool(5);
+		List<OneTestGG> individuals = new ArrayList<OneTestGG>();
+		Grid grid = G.start();
+		System.err.println(grid.cpus());
+//		ExecutorService poolExecutor = Executors.newFixedThreadPool(5);
+		ExecutorService poolExecutor = grid.executor();
 		for (int i = 0; i < 500; i++)
-			individuals.add(new OneTest(createRandomWeights(), nbRun));
+			individuals.add(new OneTestGG(createRandomWeights(), nbRun));
 		long start = System.currentTimeMillis();
 		for (mCurrentRun = 0; mCurrentRun < 100; mCurrentRun++)
 		{
-			List<Future<OneTest>> futures = new ArrayList<Future<OneTest>>();
+			List<Future<OneTestGG>> futures = new ArrayList<Future<OneTestGG>>();
 			System.out.println("Run " + mCurrentRun);
-			for (OneTest oneTest : individuals)
+			for (OneTestGG oneTest : individuals)
 				futures.add(poolExecutor.submit(oneTest, oneTest));
 			int currentIndividual = 0;
-			for (Future<OneTest> future : futures)
+			for (Future<OneTestGG> future : futures)
 			{
-				OneTest test = future.get();
+				OneTestGG test = future.get();
 				if ((bestTest == null) || (test.getResult() > bestTest.getResult()))
 					bestTest = test;
 				mAllResults[mCurrentRun][currentIndividual++] = new Double(test.getResult());
@@ -72,9 +79,9 @@ public class TestPlayersGenetic extends JFrame
 
 			// Now seed the next generation
 			// Sort in decreasing order and kill the worst while keeping the best
-			Collections.sort(individuals, new Comparator<OneTest>()
+			Collections.sort(individuals, new Comparator<OneTestGG>()
 			{
-				public int compare(OneTest t1, OneTest t2)
+				public int compare(OneTestGG t1, OneTestGG t2)
 				{
 					return -new Integer(t1.getResult()).compareTo(new Integer(t2.getResult()));
 				};
@@ -83,10 +90,10 @@ public class TestPlayersGenetic extends JFrame
 			{
 				if (iInd > individuals.size() * 0.9)
 				// kill the 10% worst and feed them with random stuff
-					individuals.set(iInd, new OneTest(createRandomWeights(), nbRun));
+					individuals.set(iInd, new OneTestGG(createRandomWeights(), nbRun));
 				else if (iInd > individuals.size() * 0.6)
 				// kill the 40% worst and feed them with the 10% best
-					individuals.set(iInd, new OneTest(shakeShake(individuals.get(mRandom.nextInt(10) * individuals.size() / 100).getWeights(), individuals, 50, 20, 20), nbRun));
+					individuals.set(iInd, new OneTestGG(shakeShake(individuals.get(mRandom.nextInt(10) * individuals.size() / 100).getWeights(), individuals, 50, 20, 20), nbRun));
 				else if (iInd < individuals.size() / 50)
 				// keep the 2% best
 				{
@@ -95,14 +102,14 @@ public class TestPlayersGenetic extends JFrame
 				else if (iInd < individuals.size() / 10)
 				// shake the others a little until 10%
 				{
-					individuals.set(iInd, new OneTest(shakeShake(individuals.get(iInd).getWeights(), individuals, 80, 5, 5), nbRun));
+					individuals.set(iInd, new OneTestGG(shakeShake(individuals.get(iInd).getWeights(), individuals, 80, 5, 5), nbRun));
 				}
 				else
 				// Shake the middle a little
-					individuals.set(iInd, new OneTest(shakeShake(individuals.get(iInd).getWeights(), individuals, 70, 10, 10), nbRun));
+					individuals.set(iInd, new OneTestGG(shakeShake(individuals.get(iInd).getWeights(), individuals, 70, 10, 10), nbRun));
 			}
 		}
-		poolExecutor.shutdown();
+		G.stop(grid.name(), true);
 		System.out.println("Done");
 	}
 
@@ -124,9 +131,9 @@ public class TestPlayersGenetic extends JFrame
 		}
 	}
 
-	public static void main(String[] args) throws InterruptedException, ExecutionException
+	public static void main(String[] args) throws InterruptedException, ExecutionException, GridException
 	{
-		TestPlayersGenetic frame = new TestPlayersGenetic();
+		TestPlayersGeneticGG frame = new TestPlayersGeneticGG();
 		frame.mAllResults = new Double[100][];
 		for (int i = 0; i < frame.mAllResults.length; i++)
 			frame.mAllResults[i] = new Double[500];
@@ -142,7 +149,7 @@ public class TestPlayersGenetic extends JFrame
 		return weights;
 	}
 
-	private double[] shakeShake(double[] pDouble, List<OneTest> pIndividuals, int pPercentKeep, int pPercentCopy, int pPercentRandom)
+	private double[] shakeShake(double[] pDouble, List<OneTestGG> pIndividuals, int pPercentKeep, int pPercentCopy, int pPercentRandom)
 	{
 		double[] res = new double[pDouble.length];
 		for (int i = 0; i < res.length; i++)
@@ -163,7 +170,7 @@ public class TestPlayersGenetic extends JFrame
 		return res;
 	}
 
-	private void printCurrentResult(OneTest pBestTest, int pCurrent, int pTotal, long pStart)
+	private void printCurrentResult(OneTestGG pBestTest, int pCurrent, int pTotal, long pStart)
 	{
 		System.out.println(((System.currentTimeMillis() - pStart) / 1000) + "s, " + pCurrent + " / " + pTotal + ", currentBestHit: " + pBestTest.getResult() + " (" + pBestTest.getMin() + "-" + pBestTest.getMax() + "), " + pBestTest.getStringRepresentation());
 	}

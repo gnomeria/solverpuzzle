@@ -4,9 +4,11 @@
  */
 package jyt.game.kadokado.binary.help;
 
+import java.io.Serializable;
+
 import jyt.game.puzzle.solving.Puzzle;
 
-public interface IPuzzleAnalyzer
+public interface IPuzzleAnalyzer extends Serializable
 {
 	double computeFitness(Puzzle<Element> pPuzzle);
 	String description();

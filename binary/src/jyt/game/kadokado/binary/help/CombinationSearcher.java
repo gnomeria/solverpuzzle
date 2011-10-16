@@ -4,6 +4,7 @@
  */
 package jyt.game.kadokado.binary.help;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -15,7 +16,7 @@ import jyt.game.puzzle.solving.Puzzle;
 import jyt.game.puzzle.solving.Result;
 import jyt.game.puzzle.solving.impl.actions.RotationClockWise;
 
-public class CombinationSearcher
+public class CombinationSearcher implements Serializable
 {
 	private IPuzzleAnalyzer mPuzzleAnalyzer;
 	private ActionManager<Element> mActionManager;

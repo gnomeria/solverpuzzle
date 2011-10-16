@@ -4,9 +4,11 @@
  */
 package jyt.game.kadokado.binary.help;
 
+import java.io.Serializable;
+
 import jyt.game.puzzle.solving.impl.Point;
 
-public class Zone
+public class Zone implements Serializable
 {
 	private Point[] mPoints;
 

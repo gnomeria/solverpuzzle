@@ -4,6 +4,7 @@
  */
 package jyt.game.puzzle.solving;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.Map;
 
 import jyt.game.puzzle.solving.impl.Point;
 
-public class Puzzle<T>
+public class Puzzle<T> implements Serializable
 {
 	private T[][] mGrid;
 	private Map<T, List<Point>> mElementsMap = null;
