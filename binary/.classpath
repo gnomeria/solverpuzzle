@@ -7,5 +7,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/puzzle"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/gridgain"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/jppf"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
