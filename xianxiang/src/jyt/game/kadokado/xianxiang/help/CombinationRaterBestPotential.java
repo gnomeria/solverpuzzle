@@ -28,6 +28,7 @@ public class CombinationRaterBestPotential implements ICombinationRater
 
 	public CombinationRaterBestPotential(ScoreComputer pScoreComputer)
 	{
+		//0.015, 2, 13, LOG, true, MULTIPLY, LOG, 11051
 		this(pScoreComputer, 0.08, new int[] {0, 1, 13, 104}, DistanceFunction.LINEAR, true, ScoreFactorFunction.LOG, ScoreFactorEffect.MULTIPLY);
 	}
 
