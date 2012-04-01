@@ -12,7 +12,7 @@ import jyt.game.puzzle.solving.Puzzle;
 
 public class PuzzleBuilder
 {
-	private static final int DEFAULT_Y = 567;
+	private static final int DEFAULT_Y = 509;
 	public static final int RECTANGLE_SIZE = 289;
 	public static final int SQUARE_SIZE = 36;
 
@@ -47,16 +47,16 @@ public class PuzzleBuilder
 		// Check if it's still at the last position found
 			found = checkPosition(robot, mLastX, mLastY);
 
-		// Check 2 positions in which it's very likely to be found
+		// Check some positions in which it's very likely to be found
 		if (!found)
-			found = checkPosition(robot, 2505, DEFAULT_Y);
+			found = checkPosition(robot, 2627, DEFAULT_Y);
 		if (!found)
 			found = checkPosition(robot, 825, DEFAULT_Y);
 		if (!found)
 			found = checkPosition(robot, -615, DEFAULT_Y);
 
 		if (!found)
-		// Couldn't find it: reset the x value and search for it accross the screen
+		// Couldn't find it: reset the x value and search for it across the screen
 		{
 			mLastX = -1;
 			int x;

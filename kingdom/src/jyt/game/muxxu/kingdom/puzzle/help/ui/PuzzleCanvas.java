@@ -4,9 +4,12 @@
  */
 package jyt.game.muxxu.kingdom.puzzle.help.ui;
 
+import java.awt.BasicStroke;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.io.IOException;
@@ -116,6 +119,8 @@ public class PuzzleCanvas extends Canvas
 			for (Hint hint : mHints)
 			{
 				pG.setColor(new Color(Math.min(255, hint.getNbReleased() * 50), 0, 0));
+				Graphics2D g2d = (Graphics2D)pG;
+				g2d.setStroke(new BasicStroke(hint.getNbReleased()));
 				pG.drawLine(hint.getX1() * PuzzleBuilder.SQUARE_SIZE + PuzzleBuilder.SQUARE_SIZE / 2, hint.getY1() * PuzzleBuilder.SQUARE_SIZE + PuzzleBuilder.SQUARE_SIZE / 2, hint.getX2() * PuzzleBuilder.SQUARE_SIZE + PuzzleBuilder.SQUARE_SIZE / 2, hint.getY2() * PuzzleBuilder.SQUARE_SIZE + PuzzleBuilder.SQUARE_SIZE / 2);
 			}
 		}
