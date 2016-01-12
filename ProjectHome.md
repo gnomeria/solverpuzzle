@@ -1,0 +1,2 @@
+Solves puzzles like jewels.
+Using evaluations of a grid, it gives the best move(s) for puzzles in which you have to align 3 or more elements of the same nature. It can be even more sophisticated by giving weights to elements in case it has more advantages to align some elements at some point.
